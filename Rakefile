@@ -5,11 +5,16 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "gluepi"
-    gem.summary = %Q{TODO}
+    gem.summary = "A Ruby library to access the Glue API"
     gem.email = "bdotdub@gmail.com"
     gem.homepage = "http://github.com/bdotdub/gluepi"
-    gem.authors = ["bdotdub"]
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.authors = ["Benny Wong"]
+
+    gem.add_dependency "httparty", "0.4.3"
+
+    gem.add_development_dependency "fakeweb"
+    gem.add_development_dependency "shoulda"
+
   end
 
 rescue LoadError
