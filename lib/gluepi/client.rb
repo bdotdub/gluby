@@ -20,6 +20,13 @@ module Gluepi
       end
     end
 
+    def logout
+      if self.authenticated?
+        @authenticated = false
+        @username = @password = nil
+      end
+    end
+
     def authenticated?
       @authenticated || false
     end

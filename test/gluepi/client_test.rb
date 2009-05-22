@@ -29,6 +29,10 @@ class ClientTest < Test::Unit::TestCase
         @client.login("username", "password")
       end
 
+      teardown do
+        @client.logout
+      end
+
       should "be authenticated" do
         @client.should  be_authenticated
         Gluepi.should   be_logged_in
@@ -44,6 +48,12 @@ class ClientTest < Test::Unit::TestCase
       should "not be authenticated" do
         @client.should_not  be_authenticated
         Gluepi.should_not   be_logged_in
+      end
+    end
+
+    context "is not logged in" do
+      should "not be logged in" do
+        Gluepi.should_not be_logged_in
       end
     end
 
