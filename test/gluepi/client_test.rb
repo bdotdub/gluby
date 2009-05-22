@@ -10,6 +10,21 @@ class ClientTest < Test::Unit::TestCase
     lambda { Gluepi::Client.instance }.should_not raise_error
   end
 
+  context "authentication" do
+    setup do
+      @client = Gluepi::Client.instance
+    end
+
+    should "be able to login" do
+      @client.should respond_to(:login)
+    end
+    
+    should "respond to authenticated?" do
+      @client.should respond_to(:authenticated?)
+    end
+
+  end
+
 end
 
 
