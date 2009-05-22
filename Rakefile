@@ -14,6 +14,7 @@ begin
 
     gem.add_development_dependency "fakeweb"
     gem.add_development_dependency "shoulda"
+    gem.add_development_dependency "matchy"
 
   end
 

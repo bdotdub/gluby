@@ -14,6 +14,13 @@ module Gluepi
       @client
     end
   end
+  
+  # Generic classes
+  class Response; end
+
+  # Errors
+  class NotAuthenticated < StandardError; end
+
 end
 
 
