@@ -23,15 +23,27 @@ class ClientTest < Test::Unit::TestCase
       @client.should respond_to(:authenticated?)
     end
 
-    context "authentication succeeded" do
+    context "has valid credentials" do
       setup do
         stub_get("/user/validate", "authentication/success.xml")
         @client.login("username", "password")
       end
 
       should "be authenticated" do
-        @client.should be_authenticated
-        # Gluepi.logged_in?.should      be_true
+        @client.should  be_authenticated
+        Gluepi.should   be_logged_in
+      end
+    end
+
+    context "has invalid credentials" do
+      setup do
+        stub_get("/user/validate", "authentication/failed.xml")
+        @client.login("username", "password")
+      end
+
+      should "not be authenticated" do
+        @client.should_not  be_authenticated
+        Gluepi.should_not   be_logged_in
       end
     end
 

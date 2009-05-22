@@ -11,7 +11,8 @@ module Gluepi
       basic_auth  = { :username => username, :password => password }
       response    = get("/user/validate", :basic_auth => basic_auth)
 
-      @authenticated = !response.respond_to?(:error) && response.response.key?('success')
+      @authenticated =  (!response.respond_to?(:error) || response.error.nil?) &&
+                        response.response.key?('success')
     end
 
     def authenticated?
