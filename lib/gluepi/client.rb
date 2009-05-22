@@ -9,10 +9,15 @@ module Gluepi
 
     def login(username, password)
       basic_auth  = { :username => username, :password => password }
-      response    = get("/user/validate", :basic_auth => basic_auth)
+      response    = unauthenticated_get("/user/validate", :basic_auth => basic_auth)
 
       @authenticated =  (!response.respond_to?(:error) || response.error.nil?) &&
                         response.response.key?('success')
+
+      if @authenticated
+        @username = username
+        @password = password
+      end
     end
 
     def authenticated?
@@ -21,12 +26,12 @@ module Gluepi
 
     private
 
-    def get(*args)
+    def unauthenticated_get(*args)
       response = self.class.get(*args)
       parse_response(response)
     end
 
-    def post(*args)
+    def unauthenticated_post(*args)
       response = self.class.post(*args)
       parse_response(response)
     end
