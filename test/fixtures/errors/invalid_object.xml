@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><adaptiveblue><request><method>/object/get</method><params><objectId>invalid</objectId></params></request><error><code>302</code><name>InvalidObject</name><message>Invalid object for key [invalid]</message></error></adaptiveblue>

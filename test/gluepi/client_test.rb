@@ -37,6 +37,16 @@ class ClientTest < Test::Unit::TestCase
         @client.should  be_authenticated
         Gluepi.should   be_logged_in
       end
+
+      should "get a valid response when calling API" do
+        stub_get("/user/validate", "authentication/success.xml")
+        @client.get("/user/validate").should be_kind_of(Gluepi::AdaptiveBlueResponse)
+      end
+
+      should "get an error with missing parameters" do
+        stub_get("/user/validate", "authentication/failed.xml")
+        @client.get("/user/validate").should be_kind_of(Gluepi::ErrorResponse)
+      end
     end
 
     context "has invalid credentials" do
@@ -54,6 +64,10 @@ class ClientTest < Test::Unit::TestCase
     context "is not logged in" do
       should "not be logged in" do
         Gluepi.should_not be_logged_in
+      end
+
+      should "not be able to make an API call" do
+        lambda { @client.get("/user/validate") }.should raise_error(Gluepi::NotAuthenticated)
       end
     end
 

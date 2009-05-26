@@ -11,8 +11,7 @@ module Gluepi
       basic_auth  = { :username => username, :password => password }
       response    = unauthenticated_get("/user/validate", :basic_auth => basic_auth)
 
-      @authenticated =  (!response.respond_to?(:error) || response.error.nil?) &&
-                        response.response.key?('success')
+      @authenticated = (!response.kind_of? Gluepi::ErrorResponse)
 
       if @authenticated
         @username = username
@@ -31,6 +30,20 @@ module Gluepi
       @authenticated || false
     end
 
+    def get(url, options = {})
+      raise Gluepi::NotAuthenticated unless self.authenticated?
+      authentication = ({ :username => @username, :password => @password })
+      options[:basic_auth] = authentication
+      unauthenticated_get(url, options)
+    end
+
+    def post(url, options = {})
+      raise Gluepi::NotAuthenticated unless self.authenticated?
+      authentication = ({ :username => @username, :password => @password })
+      options[:basic_auth] = authentication
+      unauthenticated_post(url, options)
+    end
+
     private
 
     def unauthenticated_get(*args)
@@ -44,7 +57,11 @@ module Gluepi
     end
 
     def parse_response(response)
-      response_object = Gluepi::Response.new
+      if response['adaptiveblue'].has_key? 'error'
+        return Gluepi::ErrorResponse.new
+      end
+
+      response_object = Gluepi::AdaptiveBlueResponse.new
 
       response["adaptiveblue"].each_pair do |k,v|
         unless response_object.respond_to?(k.to_sym)

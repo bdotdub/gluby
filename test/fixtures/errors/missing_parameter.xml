@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><adaptiveblue><request><method>/user/friends</method><params></params></request><error><code>101</code><name>MissingParameter</name><message>userId is missing</message></error></adaptiveblue>

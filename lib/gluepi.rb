@@ -3,6 +3,8 @@ require 'forwardable'
 require 'httparty'
 
 require 'gluepi/client'
+require 'gluepi/response'
+require 'gluepi/errors'
 
 module Gluepi
   class << self
@@ -19,12 +21,6 @@ module Gluepi
     end
   end
   
-  # Generic classes
-  class Response; end
-
-  # Errors
-  class NotAuthenticated < StandardError; end
-
 end
 
 
