@@ -40,5 +40,9 @@ def stub_uri(method, url, filename, status = nil)
   FakeWeb.register_uri(method, uri, options)
 end
   
+def stub_login
+   stub_get("/user/validate", "authentication/success.xml")
+   Gluepi.login("username", "password")
+end
 
 

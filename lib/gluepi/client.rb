@@ -74,11 +74,12 @@ module Gluepi
     end
 
     def check_and_raise_errors(response)
-      return unless (response.has_key?('adaptiveblue') &&
+      return unless response.nil? or
+                    (response.has_key?('adaptiveblue') &&
                     response['adaptiveblue'].has_key?('error')) or
                     response.code != 200
 
-      if response.has_key?('adaptiveblue')
+      if !response.nil? && response.has_key?('adaptiveblue')
         error_obj = nil
         ab_response = response['adaptiveblue']
         error = ab_response['error']
