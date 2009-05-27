@@ -45,14 +45,17 @@ class ClientTest < Test::Unit::TestCase
 
       should "get an error with missing parameters" do
         stub_get("/user/validate", "authentication/failed.xml")
-        @client.get("/user/validate").should be_kind_of(Gluepi::ErrorResponse)
+        lambda { @client.get("/user/validate") }.should raise_error(Gluepi::NotAuthenticated)
       end
     end
 
     context "has invalid credentials" do
       setup do
         stub_get("/user/validate", "authentication/failed.xml")
-        @client.login("username", "password")
+      end
+
+      should "raise an error when logging in" do
+        lambda { @client.login("username", "password") }.should raise_error(Gluepi::NotAuthenticated)
       end
 
       should "not be authenticated" do

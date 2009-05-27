@@ -57,9 +57,7 @@ module Gluepi
     end
 
     def parse_response(response)
-      if response['adaptiveblue'].has_key? 'error'
-        return Gluepi::ErrorResponse.new
-      end
+      check_and_raise_errors(response)
 
       response_object = Gluepi::AdaptiveBlueResponse.new
 
@@ -73,6 +71,39 @@ module Gluepi
       end
 
       response_object
+    end
+
+    def check_and_raise_errors(response)
+      return unless (response.has_key?('adaptiveblue') &&
+                    response['adaptiveblue'].has_key?('error')) or
+                    response.code != 200
+
+      if response.has_key?('adaptiveblue')
+        error_obj = nil
+        ab_response = response['adaptiveblue']
+        error = ab_response['error']
+
+        case error['code'].to_i
+          when 101 then
+            raise Gluepi::MissingParameter
+          when 201 then
+            raise Gluepi::NotAuthenticated.new
+          when 202 then
+            raise Gluepi::PermissionError
+          when 301 then
+            raise Gluepi::InvalidURL
+          when 302 then
+            raise Gluepi::InvalidObject
+          when 303 then
+            raise Gluepi::InvalidInteraction
+          when 304 then
+            raise Gluepi::InvalidUser
+        end
+      else
+        case response.code
+          when 500 then raise Gluepi::InternalServerError
+        end
+      end
     end
 
   end
