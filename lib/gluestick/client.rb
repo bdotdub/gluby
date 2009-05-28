@@ -1,4 +1,4 @@
-module Gluepi
+module Gluestick
   class Client
     include Singleton
     include HTTParty
@@ -11,7 +11,7 @@ module Gluepi
       basic_auth  = { :username => username, :password => password }
       response    = unauthenticated_get("/user/validate", :basic_auth => basic_auth)
 
-      @authenticated = (!response.kind_of? Gluepi::ErrorResponse)
+      @authenticated = (!response.kind_of? Gluestick::ErrorResponse)
 
       if @authenticated
         @username = username
@@ -31,14 +31,14 @@ module Gluepi
     end
 
     def get(url, options = {})
-      raise Gluepi::NotAuthenticated unless self.authenticated?
+      raise Gluestick::NotAuthenticated unless self.authenticated?
       authentication = ({ :username => @username, :password => @password })
       options[:basic_auth] = authentication
       unauthenticated_get(url, options)
     end
 
     def post(url, options = {})
-      raise Gluepi::NotAuthenticated unless self.authenticated?
+      raise Gluestick::NotAuthenticated unless self.authenticated?
       authentication = ({ :username => @username, :password => @password })
       options[:basic_auth] = authentication
       unauthenticated_post(url, options)
@@ -59,7 +59,7 @@ module Gluepi
     def parse_response(response)
       check_and_raise_errors(response)
 
-      response_object = Gluepi::AdaptiveBlueResponse.new
+      response_object = Gluestick::AdaptiveBlueResponse.new
 
       response["adaptiveblue"].each_pair do |k,v|
         unless response_object.respond_to?(k.to_sym)
@@ -86,23 +86,23 @@ module Gluepi
 
         case error['code'].to_i
           when 101 then
-            raise Gluepi::MissingParameter
+            raise Gluestick::MissingParameter
           when 201 then
-            raise Gluepi::NotAuthenticated.new
+            raise Gluestick::NotAuthenticated.new
           when 202 then
-            raise Gluepi::PermissionError
+            raise Gluestick::PermissionError
           when 301 then
-            raise Gluepi::InvalidURL
+            raise Gluestick::InvalidURL
           when 302 then
-            raise Gluepi::InvalidObject
+            raise Gluestick::InvalidObject
           when 303 then
-            raise Gluepi::InvalidInteraction
+            raise Gluestick::InvalidInteraction
           when 304 then
-            raise Gluepi::InvalidUser
+            raise Gluestick::InvalidUser
         end
       else
         case response.code
-          when 500 then raise Gluepi::InternalServerError
+          when 500 then raise Gluestick::InternalServerError
         end
       end
     end

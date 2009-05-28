@@ -1,4 +1,4 @@
-module Gluepi
+module Gluestick
   class AdaptiveBlueError < StandardError
   end
 

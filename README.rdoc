@@ -1,6 +1,6 @@
-= gluepi
+= Gluestick
 
-Description goes here.
+Ruby bindings for the Glue API
 
 == Copyright
 

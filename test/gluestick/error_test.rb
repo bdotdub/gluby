@@ -6,7 +6,7 @@ class ErrorTest < Test::Unit::TestCase
     stub_login
     stub_get("/user/invalid", "blank.xml", 500)
 
-    lambda { Gluepi.client.get("/user/invalid") }.should raise_error(Gluepi::InternalServerError)
+    lambda { Gluestick.client.get("/user/invalid") }.should raise_error(Gluestick::InternalServerError)
   end
 
 end

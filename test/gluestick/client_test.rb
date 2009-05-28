@@ -3,16 +3,16 @@ require File.dirname(__FILE__) + '/../test_helper'
 class ClientTest < Test::Unit::TestCase
 
   should "not be able to call 'new' on the singleton" do
-    lambda { Gluepi::Client.new }.should raise_error  
+    lambda { Gluestick::Client.new }.should raise_error  
   end
 
   should "be able to get the only instance" do
-    lambda { Gluepi::Client.instance }.should_not raise_error
+    lambda { Gluestick::Client.instance }.should_not raise_error
   end
 
   context "client" do
     setup do
-      @client = Gluepi::Client.instance
+      @client = Gluestick::Client.instance
     end
 
     should "be able to login" do
@@ -35,17 +35,17 @@ class ClientTest < Test::Unit::TestCase
 
       should "be authenticated" do
         @client.should  be_authenticated
-        Gluepi.should   be_logged_in
+        Gluestick.should   be_logged_in
       end
 
       should "get a valid response when calling API" do
         stub_get("/user/validate", "authentication/success.xml")
-        @client.get("/user/validate").should be_kind_of(Gluepi::AdaptiveBlueResponse)
+        @client.get("/user/validate").should be_kind_of(Gluestick::AdaptiveBlueResponse)
       end
 
       should "get an error with missing parameters" do
         stub_get("/user/validate", "authentication/failed.xml")
-        lambda { @client.get("/user/validate") }.should raise_error(Gluepi::NotAuthenticated)
+        lambda { @client.get("/user/validate") }.should raise_error(Gluestick::NotAuthenticated)
       end
     end
 
@@ -55,22 +55,22 @@ class ClientTest < Test::Unit::TestCase
       end
 
       should "raise an error when logging in" do
-        lambda { @client.login("username", "password") }.should raise_error(Gluepi::NotAuthenticated)
+        lambda { @client.login("username", "password") }.should raise_error(Gluestick::NotAuthenticated)
       end
 
       should "not be authenticated" do
         @client.should_not  be_authenticated
-        Gluepi.should_not   be_logged_in
+        Gluestick.should_not   be_logged_in
       end
     end
 
     context "is not logged in" do
       should "not be logged in" do
-        Gluepi.should_not be_logged_in
+        Gluestick.should_not be_logged_in
       end
 
       should "not be able to make an API call" do
-        lambda { @client.get("/user/validate") }.should raise_error(Gluepi::NotAuthenticated)
+        lambda { @client.get("/user/validate") }.should raise_error(Gluestick::NotAuthenticated)
       end
     end
 

@@ -4,10 +4,10 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "gluepi"
+    gem.name = "gluestick"
     gem.summary = "A Ruby library to access the Glue API"
     gem.email = "bdotdub@gmail.com"
-    gem.homepage = "http://github.com/bdotdub/gluepi"
+    gem.homepage = "http://github.com/bdotdub/gluestick"
     gem.authors = ["Benny Wong"]
 
     gem.add_dependency "httparty", "0.4.3"
@@ -55,7 +55,7 @@ Rake::RDocTask.new do |rdoc|
   end
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "gluepi #{version}"
+  rdoc.title = "gluestick #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end

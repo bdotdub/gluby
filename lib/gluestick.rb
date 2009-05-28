@@ -2,17 +2,17 @@ require 'singleton'
 require 'forwardable'
 require 'httparty'
 
-require 'gluepi/client'
-require 'gluepi/response'
-require 'gluepi/errors'
+require 'gluestick/client'
+require 'gluestick/response'
+require 'gluestick/errors'
 
-module Gluepi
+module Gluestick
   class << self
     extend Forwardable
     def_delegators :client, :login
 
     def client
-      @client = Gluepi::Client.instance unless @client
+      @client = Gluestick::Client.instance unless @client
       @client
     end
 

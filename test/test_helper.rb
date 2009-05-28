@@ -8,13 +8,13 @@ FakeWeb.allow_net_connect = false
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'gluepi'
+require 'gluestick'
 
 class Test::Unit::TestCase
 end
 
 def api_uri(path)
-  base_uri = Gluepi::Client::API_URI.gsub(/\/v1/, ":80/v1")
+  base_uri = Gluestick::Client::API_URI.gsub(/\/v1/, ":80/v1")
   "#{base_uri}#{path}"
 end
 
@@ -42,7 +42,7 @@ end
   
 def stub_login
    stub_get("/user/validate", "authentication/success.xml")
-   Gluepi.login("username", "password")
+   Gluestick.login("username", "password")
 end
 
 
