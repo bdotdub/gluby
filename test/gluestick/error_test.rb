@@ -23,7 +23,35 @@ class ErrorTest < Test::Unit::TestCase
     lambda { Gluestick.client.get("/object/get?objectId=something") }.should raise_error(Gluestick::InvalidObject)
   end
 
+  context "error initialized with response" do
+    setup do
+      FakeWeb.clean_registry
 
+      stub_login
+      stub_get("/user/profile", "errors/missing_parameter.xml", 400);
+
+    end
+
+    should "respond to message, code, and name" do
+      begin
+        Gluestick.client.get("/user/profile")
+      rescue Gluestick::MissingParameter => missing_object
+        missing_object.should respond_to(:name)
+        missing_object.should respond_to(:message)
+        missing_object.should respond_to(:code)
+      end
+    end
+
+    should "have the correct code and name" do
+      begin
+        Gluestick.client.get("/user/profile")
+      rescue Gluestick::MissingParameter => missing_object
+        missing_object.name.should == "MissingParameter"
+        missing_object.code.should == 101
+      end
+    end
+
+  end
 
 end
 

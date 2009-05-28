@@ -1,5 +1,14 @@
 module Gluestick
   class AdaptiveBlueError < StandardError
+    attr_reader :name, :code, :message
+
+    def initialize(error = nil)
+      if not error.nil?
+        @name     = error['name']
+        @code     = error['code'].to_i
+        @message  = error['message']
+      end
+    end
   end
 
   class NotAuthenticated < AdaptiveBlueError; end

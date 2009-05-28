@@ -86,15 +86,15 @@ module Gluestick
 
         case error['code'].to_i
           when 101 then
-            raise Gluestick::MissingParameter
+            raise Gluestick::MissingParameter.new(error)
           when 201 then
-            raise Gluestick::NotAuthenticated.new
+            raise Gluestick::NotAuthenticated
           when 202 then
             raise Gluestick::PermissionError
           when 301 then
             raise Gluestick::InvalidURL
           when 302 then
-            raise Gluestick::InvalidObject
+            raise Gluestick::InvalidObject.new(error)
           when 303 then
             raise Gluestick::InvalidInteraction
           when 304 then
