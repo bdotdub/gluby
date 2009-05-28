@@ -15,6 +15,10 @@ class ClientTest < Test::Unit::TestCase
       @client = Gluestick::Client.instance
     end
 
+    teardown do
+      FakeWeb.clean_registry
+    end
+
     should "be able to login" do
       @client.should respond_to(:login)
     end
@@ -74,6 +78,20 @@ class ClientTest < Test::Unit::TestCase
       end
     end
 
+  end
+
+  context "constructing request URI" do
+    setup do
+      @client = Gluestick::Client.instance
+      stub_login
+    end
+
+    should "call the correctly stubbed URI" do
+      stub_get("/user/endpoint?param=value", "authentication/success.xml")
+
+      lambda { @client.get("/user/endpoint") }.should raise_error
+      lambda { @client.get("/user/endpoint", :query => { :param => 'value' }) }.should_not raise_error
+    end
   end
 
 end
