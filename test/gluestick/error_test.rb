@@ -36,9 +36,7 @@ class ErrorTest < Test::Unit::TestCase
       begin
         Gluestick.client.get("/user/profile")
       rescue Gluestick::MissingParameter => missing_object
-        missing_object.should respond_to(:name)
-        missing_object.should respond_to(:message)
-        missing_object.should respond_to(:code)
+        missing_object.should respond_to(:name, :message, :code)
       end
     end
 
