@@ -40,6 +40,61 @@ context "profile" do
   end
 end
 
+context "followers and friends" do
+  setup do
+    stub_login
+  end
+
+  should "have more multiple followers" do
+    stub_get("/user/followers?userId=someuser", "user/followers.xml")
+    followers = Gluestick::User.new("someuser").followers
+
+    followers.class.should  == Array
+    followers.length.should ==  10
+  end
+
+  should "be instances of User" do
+    stub_get("/user/followers?userId=someuser", "user/followers.xml")
+    followers = Gluestick::User.new("someuser").followers
+    followers[0].should be_instance_of(Gluestick::User)
+    
+    stub_get("/user/friends?userId=someuser", "user/friends.xml")
+    friends = Gluestick::User.new("someuser").friends
+    friends[0].should be_instance_of(Gluestick::User)
+  end
+
+  should "have more multiple friends" do
+    stub_get("/user/friends?userId=someuser", "user/friends.xml")
+    friends = Gluestick::User.new("someuser").friends
+
+    friends.class.should  == Array
+    friends.length.should == 9
+  end
+end
+
+context "interactions with other users" do
+  setup do
+    stub_login
+    @user = Gluestick::User.new("someuser")
+  end
+
+  should "be successful when following a public member" do
+    stub_get("/user/follow?userId=someotheruser", "user/follow.xml")
+    someotheruser = Gluestick::User.new("someotheruser")
+
+    @user.follow("someotheruser").should  == "success"
+    @user.follow(someotheruser).should    == "success"
+  end
+
+  should "be pending when requesting to follow a private user" do
+    stub_get("/user/follow?userId=someprivateuser", "user/follow_pending.xml")
+    someprivateuser = Gluestick::User.new("someprivateuser")
+
+    @user.follow("someprivateuser").should  == "pending"
+    @user.follow(someprivateuser).should    == "pending"
+  end
+end
+
 end
 
 
