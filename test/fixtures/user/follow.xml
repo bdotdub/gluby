@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><adaptiveblue><request><method>/user/follow</method><params><followUserId>someuser</followUserId></params></request><response><success/><timestamp>2009-05-29T02:14:20Z</timestamp></response></adaptiveblue>
