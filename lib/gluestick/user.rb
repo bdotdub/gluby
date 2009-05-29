@@ -1,7 +1,7 @@
 module Gluestick
   class User
     extend Gluestick::LazyLoader
-    lazy_load(%w[display_name description favorites services private], :get_user_profile)
+    lazy_load([:display_name, :description, :favorites, :services, :private], :get_user_profile)
 
     attr_reader :username
 

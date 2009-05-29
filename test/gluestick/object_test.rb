@@ -3,9 +3,9 @@ require File.dirname(__FILE__) + '/../test_helper'
 class ObjectTest < Test::Unit::TestCase
 
   def mock_object_from_object
-    stub_get("/object/get?objectId=mock_object", "object/get.xml")
+    stub_get("/object/get?objectKey=mock_object", "object/get.xml")
     response = Gluestick::Client.instance.get("/object/get",
-                                              :query => { :objectId => 'mock_object' })
+                                              :query => { :objectKey => 'mock_object' })
     Gluestick::Object.from_object(response)
   end
 
@@ -14,9 +14,9 @@ class ObjectTest < Test::Unit::TestCase
   end
 
   should "be able to generate objects from factories" do
-    stub_get("/object/get?objectId=mock_object", "object/get.xml")
+    stub_get("/object/get?objectKey=mock_object", "object/get.xml")
     response = Gluestick::Client.instance.get("/object/get",
-                                              :query => { :objectId => 'mock_object' })
+                                              :query => { :objectKey => 'mock_object' })
     Gluestick::Object.from_object(response).should be_kind_of(Gluestick::Object)
   end
 
@@ -45,7 +45,25 @@ class ObjectTest < Test::Unit::TestCase
     end
   end
 
+  context "get object by objectKey" do
+    setup do
+      @objectKey = @escapedObjectKey = "http://www.amazon.com/dp/B001P9KR8U/"
+      @escapedObjectKey = URI.escape(@escapedObjectKey, "/")
+      @escapedObjectKey = URI.escape(@escapedObjectKey, ":")
+    end
+    
+    should "be able to find valid objectKey" do
+      stub_get("/object/get?objectId=#{@escapedObjectKey}", "object/get.xml")
+      object = Gluestick::Object.get(@objectKey)
 
+      object.should_not be_nil
+      object.should be_instance_of(Gluestick::MovieObject)
+    end
+
+    should "return nil when objectKey is not found" do
+      
+    end
+  end
 
 end
 

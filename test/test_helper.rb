@@ -36,7 +36,7 @@ def stub_uri(method, url, filename, status = nil)
   options = { :string => fixture_file(filename) }
   options[:status] = status unless status.nil?
 
-  uri = api_uri(url).gsub(/:\/\//, "://username:password@")
+  uri = api_uri(url).sub(/:\/\//, "://username:password@")
   FakeWeb.register_uri(method, uri, options)
 end
   

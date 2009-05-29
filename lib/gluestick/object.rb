@@ -1,7 +1,14 @@
 module Gluestick
   class Object
+    extend LazyLoader
+  
     private_class_method  :new
     attr_reader           :objectKey, :title, :image, :link, :type    
+
+    def self.get(objectId)
+      response = Gluestick.get("/object/get", :query => { :objectId => objectId })
+      from_object(response)
+    end
 
     def self.from_object(response)
       raise TypeError if not response.instance_of?(Gluestick::AdaptiveBlueResponse)
@@ -9,6 +16,8 @@ module Gluestick
       object_xml  = response.response['object']
       object      = nil
 
+      # Would've extracted this out into a constant, but the classes
+      # are not defined and throws NameErrors
 	    @@categories = {
 	      :books               => Gluestick::BookObject,
 	      :electronics         => Gluestick::ElectronicObject,
@@ -29,17 +38,25 @@ module Gluestick
         create
       end
 
-      response.response['object'].each do |property, value|
-        object.instance_variable_set(:"@#{property.to_s}", value)
-      end
-
+      assign_variables_from_response(object, response)
       object
+    end
+
+    def get
+      response = Gluestick.get("/object/get", :query => { :objectId => objectId })
+      self.assign_variables_from_response(self, response)
     end
 
     protected
 
     def self.create
       new
+    end
+
+    def self.assign_variables_from_response(object, response)
+      response.response['object'].each do |property, value|
+        object.instance_variable_set(:"@#{property.to_s}", value)
+      end
     end
   end
 
@@ -53,7 +70,7 @@ module Gluestick
   end
 
   class MovieObject < Object
-    attr_reader :director, :year, :starring
+    lazy_load [:director, :year, :starring], :get
   end
 
   class MusicObject < Object
