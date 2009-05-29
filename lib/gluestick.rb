@@ -5,6 +5,7 @@ require 'httparty'
 require 'gluestick/client'
 require 'gluestick/response'
 require 'gluestick/errors'
+require 'gluestick/user'
 
 module Gluestick
   class << self
