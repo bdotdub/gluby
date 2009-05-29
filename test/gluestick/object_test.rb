@@ -61,7 +61,10 @@ class ObjectTest < Test::Unit::TestCase
     end
 
     should "return nil when objectKey is not found" do
-      
+      stub_get("/object/get?objectId=invalid_key", "errors/invalid_object.xml")
+      object = Gluestick::Object.get('invalid_key') 
+
+      object.should be_nil
     end
   end
 

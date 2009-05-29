@@ -6,8 +6,12 @@ module Gluestick
     attr_reader           :objectKey, :title, :image, :link, :type    
 
     def self.get(objectId)
-      response = Gluestick.get("/object/get", :query => { :objectId => objectId })
-      from_object(response)
+      begin
+        response = Gluestick.get("/object/get", :query => { :objectId => objectId })
+        from_object(response)
+      rescue Gluestick::InvalidObject
+        nil
+      end
     end
 
     def self.from_object(response)
