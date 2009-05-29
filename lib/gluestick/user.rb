@@ -1,5 +1,8 @@
 module Gluestick
   class User
+    extend Gluestick::LazyLoader
+    lazy_load(%w[display_name description favorites services private], :get_user_profile)
+
     attr_reader :username
 
     def initialize(username)
@@ -35,17 +38,9 @@ module Gluestick
     end
 
     def private?
-      get_user_profile if not instance_variables.include?("@private")
-      eval @private
+      eval self.private
     end
 
-    # Create the accessors for the attributes that come from the profile call
-    %w[display_name description favorites services].each do |property|
-      define_method(property) do
-        get_user_profile if not instance_variables.include?("@#{property}")
-        instance_variable_get("@#{property}")
-      end
-    end
 
     private
 
