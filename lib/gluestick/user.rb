@@ -8,13 +8,13 @@ module Gluestick
 
     def followers
       response = Gluestick::Client.instance.get("/user/followers", :query => { :userId => @username })
-      @followers = response.response['followers']['userId']
+      @followers = response.response['followers'].nil? ? [] : response.response['followers']['userId']
       @followers = @followers.map{ |follower| User.new(follower) }
     end
 
     def friends
       response = Gluestick::Client.instance.get("/user/friends", :query => { :userId => @username })
-      @friends = response.response['friends']['userId']
+      @friends = response.response['friends'].nil? ? [] : response.response['friends']['userId']
       @friends = @friends.map{ |friend| User.new(friend) }
     end
 

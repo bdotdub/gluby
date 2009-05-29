@@ -70,6 +70,14 @@ context "followers and friends" do
     friends.class.should  == Array
     friends.length.should == 9
   end
+
+  should "have no friends and be ok" do
+    stub_get("/user/friends?userId=someloser", "user/no_friends.xml")
+    friends = Gluestick::User.new("someloser").friends
+
+    friends.class.should  == Array
+    friends.length.should == 0
+  end
 end
 
 context "interactions with other users" do

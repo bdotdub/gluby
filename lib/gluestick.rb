@@ -6,6 +6,8 @@ require 'gluestick/client'
 require 'gluestick/response'
 require 'gluestick/errors'
 require 'gluestick/user'
+require 'gluestick/interaction'
+require 'gluestick/object'
 
 module Gluestick
   class << self
