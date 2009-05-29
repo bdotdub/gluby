@@ -35,14 +35,14 @@ module Gluestick
     end
 
     def private?
-      get_user_profile if not instance_variable_defined?("@private")
+      get_user_profile if not instance_variables.include?("@private")
       eval @private
     end
 
     # Create the accessors for the attributes that come from the profile call
     %w[display_name description favorites services].each do |property|
       define_method(property) do
-        get_user_profile if not instance_variable_defined?("@#{property}")
+        get_user_profile if not instance_variables.include?("@#{property}")
         instance_variable_get("@#{property}")
       end
     end

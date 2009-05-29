@@ -2,17 +2,22 @@ $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'rubygems'
 require 'gluestick'
 
+# Login
 Gluestick.login(ENV['GLUE_USERNAME'], ENV['GLUE_PASSWORD'])
 username = ENV['GLUE_USERNAME']
 
-username = "bnlah"
+# Create user
 @user = Gluestick::User.new(username)
 
+# Quickie output
 puts "Example with #{username}"
 
+# Print followers
 puts "Follower userIds:"
 @user.followers.each{ |user| puts "\t#{user.username}" }
 
+# Print friends' information. I threw each request into a 
+# thread so that it would execute a bit quicker
 puts "Friend display names:"
 @user.friends.map{ |user|
   Thread.new{
