@@ -26,6 +26,14 @@ module Gluestick
       (result.length > 0) ? result[0] : nil;
     end
 
+    def unfollow(other_user)
+      other_user = other_user.username if other_user.instance_of?(Gluestick::User)
+
+      response = Gluestick::Client.instance.get("/user/unfollow", :query => { :userId => other_user })
+      'success' if response.response.has_key?('success')
+      result = response.response.keys.select{ |key| ['success', 'pending'].include?(key) }
+    end
+
     def private?
       get_user_profile if not instance_variable_defined?("@private")
       eval @private
@@ -50,7 +58,7 @@ module Gluestick
     
       # Since httparty's xml deserialization is a little weird, we need to
       # hack it a bit
-      @services = @services['service']
+      @services = @services['service'] if @services
     end
   end
 end
