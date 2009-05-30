@@ -31,25 +31,6 @@ module Gluestick
       Gluestick::Interaction.from_response(response)
     end
 
-    def follow(other_user)
-      other_user = other_user.username if other_user.instance_of?(Gluestick::User)
-      response = Gluestick.get("/user/follow", :query => { :userId => other_user })
-
-      result = nil
-      ['success', 'pending'].each do |tag|
-        result = tag if response.response.has_key?(tag)
-      end
-
-      result
-    end
-
-    def unfollow(other_user)
-      other_user = other_user.username if other_user.instance_of?(Gluestick::User)
-      response = Gluestick.get("/user/unfollow", :query => { :userId => other_user })
-
-      response.response.has_key?('success') ? 'success' : nil
-    end
-
     def private?
       eval self.private
     end

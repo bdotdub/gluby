@@ -1,7 +1,32 @@
 = Gluestick
 
-Ruby bindings for the Glue API
+Ruby bindings for the Glue API (http://getglue.com/api).
+
+== Usage
+
+Before making any calls to Glue, you must login. To do that, call:
+
+  Gluestick.login(username, password)
+
+=== Documentation
+
+For documentation, please refer to: http://bdotdub.github.com/gluestick
+
+== Examples 
+
+For examples on how to use the library, please refer to the `examples` directory
+or http://github.com/bdotdub/gluestick/tree/master/examples
+
+== Installation
+
+To install it as a gem, run:
+
+  $ sudo gem install bdotdub-gluestick --source=http://gems.github.com
+
+== Author
+
+* Benny Wong - http://bwong.net/
 
 == Copyright
 
-Copyright (c) 2009 bdotdub. See LICENSE for details.
+Copyright (c) 2009 Benny Wong. See LICENSE for details.

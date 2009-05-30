@@ -80,29 +80,6 @@ class UserTest < Test::Unit::TestCase
     end
   end
   
-  context "interactions with other users" do
-    setup do
-      stub_login
-      @user = Gluestick::User.new("someuser")
-    end
-  
-    should "be successful when following a public member" do
-      stub_get("/user/follow?userId=someotheruser", "user/follow.xml")
-      someotheruser = Gluestick::User.new("someotheruser")
-  
-      @user.follow("someotheruser").should  == "success"
-      @user.follow(someotheruser).should    == "success"
-    end
-  
-    should "be pending when requesting to follow a private user" do
-      stub_get("/user/follow?userId=someprivateuser", "user/follow_pending.xml")
-      someprivateuser = Gluestick::User.new("someprivateuser")
-  
-      @user.follow("someprivateuser").should  == "pending"
-      @user.follow(someprivateuser).should    == "pending"
-    end
-  end
-
   context "getting user objects" do
     setup do
       stub_get("/user/objects?userId=someuser", "user/objects.xml")
