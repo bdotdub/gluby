@@ -4,8 +4,8 @@ class ObjectTest < Test::Unit::TestCase
 
   def mock_object_from_object
     stub_get("/object/get?objectKey=mock_object", "object/get.xml")
-    response = Gluestick::Client.instance.get("/object/get",
-                                              :query => { :objectKey => 'mock_object' })
+    response = Gluestick.get("/object/get",
+                             :query => { :objectKey => 'mock_object' })
     Gluestick::Object.from_object(response)
   end
 
@@ -15,8 +15,8 @@ class ObjectTest < Test::Unit::TestCase
 
   should "be able to generate objects from factories" do
     stub_get("/object/get?objectKey=mock_object", "object/get.xml")
-    response = Gluestick::Client.instance.get("/object/get",
-                                              :query => { :objectKey => 'mock_object' })
+    response = Gluestick.get("/object/get",
+                             :query => { :objectKey => 'mock_object' })
     Gluestick::Object.from_object(response).should be_kind_of(Gluestick::Object)
 
     response = {"timestamp"=>"2009-05-29T04:28:17Z", "category"=>"movies", "title"=>"Slumdog Millionaire", "action"=>"Looked", "objectKey"=>"movies/slumdog_millionaire/danny_boyle", "userId"=>"spschessr", "image"=>"http://cdn-0.nflximg.com/us/boxshots/large/70095140.jpg", "source"=>{"name"=>"apple.com", "link"=>"http://www.apple.com/trailers/fox_searchlight/slumdogmillionaire"}}

@@ -10,13 +10,13 @@ module Gluestick
     end
 
     def followers
-      response = Gluestick::Client.instance.get("/user/followers", :query => { :userId => @username })
+      response = Gluestick.get("/user/followers", :query => { :userId => @username })
       @followers = response.response['followers'].nil? ? [] : response.response['followers']['userId']
       @followers = @followers.map{ |follower| User.new(follower) }
     end
 
     def friends
-      response = Gluestick::Client.instance.get("/user/friends", :query => { :userId => @username })
+      response = Gluestick.get("/user/friends", :query => { :userId => @username })
       @friends = response.response['friends'].nil? ? [] : response.response['friends']['userId']
       @friends = @friends.map{ |friend| User.new(friend) }
     end
@@ -24,7 +24,7 @@ module Gluestick
     def follow(other_user)
       other_user = other_user.username if other_user.instance_of?(Gluestick::User)
 
-      response = Gluestick::Client.instance.get("/user/follow", :query => { :userId => other_user })
+      response = Gluestick.get("/user/follow", :query => { :userId => other_user })
       result = response.response.keys.select{ |key| ['success', 'pending'].include?(key) }
       (result.length > 0) ? result[0] : nil;
     end
@@ -32,7 +32,7 @@ module Gluestick
     def unfollow(other_user)
       other_user = other_user.username if other_user.instance_of?(Gluestick::User)
 
-      response = Gluestick::Client.instance.get("/user/unfollow", :query => { :userId => other_user })
+      response = Gluestick.get("/user/unfollow", :query => { :userId => other_user })
       'success' if response.response.has_key?('success')
       result = response.response.keys.select{ |key| ['success', 'pending'].include?(key) }
     end
@@ -45,7 +45,7 @@ module Gluestick
     private
 
     def get_user_profile
-      response = Gluestick::Client.instance.get("/user/profile", :query => { :userId => @username })
+      response = Gluestick.get("/user/profile", :query => { :userId => @username })
       response.response['profile'].each do |key, value|
         underscored_key = key.gsub(/[A-Z]/) do |p| '_' + p.downcase end
         instance_variable_set("@#{underscored_key}", value)
