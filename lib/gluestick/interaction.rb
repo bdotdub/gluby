@@ -52,6 +52,10 @@ module Gluestick
 	    interaction.instance_variable_set("@object", object)
 	    interaction.instance_variable_set("@action", action)
 
+      interaction_element.each do |property, value|
+        interaction.instance_variable_set(:"@#{property.to_s}", value)
+      end
+
       interaction
     end
 
@@ -77,7 +81,17 @@ module Gluestick
 
   class LookedInteraction < Interaction; end
   class LikedInteraction < Interaction; end
-  class CommentInteraction < Interaction; end
-  class LikedCommentInteraction < Interaction; end
-  class ReplyInteraction < Interaction; end
+
+  class InteractionWithComment < Interaction
+    attr_reader :comment
+  end
+
+  class CommentInteraction < InteractionWithComment
+  end
+  
+  class LikedCommentInteraction < InteractionWithComment
+  end
+
+  class ReplyInteraction < InteractionWithComment
+  end
 end

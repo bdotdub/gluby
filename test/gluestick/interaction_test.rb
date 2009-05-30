@@ -60,5 +60,24 @@ class InteractionTest < Test::Unit::TestCase
     end
   end
 
+  context "specific interactions" do
+    context "liked comment" do
+      setup do
+        stub_get("/user/object", "user/object.xml")
+        response = Gluestick.get("/user/object")
+        @interaction = Gluestick::Interaction.from_response(response)
+      end
+
+      should "be a liked comment interaction" do
+        @interaction.should be_instance_of(Gluestick::LikedCommentInteraction)
+      end
+
+      should "have a comment" do
+        @interaction.should respond_to(:comment)
+        @interaction.comment.should_not be_empty
+      end
+    end
+  end
+
 end
 
