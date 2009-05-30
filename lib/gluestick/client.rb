@@ -1,37 +1,51 @@
 module Gluestick
   class Client
+
+    # = Gluestick::Client -- The client that makes all the HTTP requests
+    # 
+    # In general, these methods are not called directly. These calls can
+    # be made via the +Gluestick+ module
+    #
+
     include Singleton
     include HTTParty
 
+    # Base Glue API URI
     API_URI   = "http://api.getglue.com/v1"
+
+    # Some +HTTParty+ config options
     base_uri  API_URI
     format    :xml
 
+    # The username that the client is logged in as
     attr_reader :username
 
+    # Authenticates using +username+ and +password+. Raises an +NotAuthenticated+
+    # exception when login is invalid.
     def login(username, password)
       basic_auth  = { :username => username, :password => password }
       response    = unauthenticated_get("/user/validate", :basic_auth => basic_auth)
 
-      @authenticated = (!response.kind_of? Gluestick::ErrorResponse)
-
-      if @authenticated
-        @username = username
-        @password = password
-      end
+      # If the login failed, an exception will be thrown, so at this point, we can be sure
+      # that we're logged in.
+      @authenticated = true
+      @username = username
+      @password = password
     end
 
+    # Deauthenticates the client.
     def logout
-      if self.authenticated?
-        @authenticated = false
-        @username = @password = nil
-      end
+      @authenticated = false
+      @username = @password = nil
     end
 
+    # Returns whether or not the client is authenticated
     def authenticated?
       @authenticated || false
     end
 
+    # Perform HTTP GET on the Glue API for +url+. +options+ are HTTParty options.
+    # This mixes in the authentication stuff for the HTTParty call.
     def get(url, options = {})
       raise Gluestick::NotAuthenticated unless self.authenticated?
       authentication = ({ :username => @username, :password => @password })
@@ -39,6 +53,7 @@ module Gluestick
       unauthenticated_get(url, options)
     end
 
+    # Just like Gluestick::Client::get, except it does an HTTP POST
     def post(url, options = {})
       raise Gluestick::NotAuthenticated unless self.authenticated?
       authentication = ({ :username => @username, :password => @password })
@@ -60,19 +75,7 @@ module Gluestick
 
     def parse_response(response)
       check_and_raise_errors(response)
-
-      response_object = Gluestick::AdaptiveBlueResponse.new
-
-      response["adaptiveblue"].each_pair do |k,v|
-        unless response_object.respond_to?(k.to_sym)
-          response_object.class.class_eval do
-            attr_reader k
-          end
-        end
-        response_object.instance_variable_set("@#{k.to_s}", v)
-      end
-
-      response_object
+      Gluestick::AdaptiveBlueResponse.new(response)
     end
 
     def check_and_raise_errors(response)

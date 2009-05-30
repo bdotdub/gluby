@@ -4,7 +4,7 @@ module Gluestick
     private_class_method  :new
 
     def self.from_response(response)
-      raise TypeError if response.class != Gluestick::AdaptiveBlueResponse
+      raise ArgumentError if response.class != Gluestick::AdaptiveBlueResponse
 
       interactions  = interactions_xml = []
       username      = response.request['params']['userId'] || ''

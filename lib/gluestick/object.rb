@@ -18,7 +18,7 @@ module Gluestick
     end
 
     def self.from_object(response)
-      raise TypeError if not response.instance_of?(Gluestick::AdaptiveBlueResponse)
+      raise ArgumentError if not response.instance_of?(Gluestick::AdaptiveBlueResponse)
 
       object_xml  = response.response['object']
       type        = object_xml['type']

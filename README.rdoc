@@ -10,7 +10,7 @@ Before making any calls to Glue, you must login. To do that, call:
 
 === Documentation
 
-For documentation, please refer to: http://bdotdub.github.com/gluestick
+For documentation, please refer to: http://rdoc.info/projects/bdotdub/gluestick
 
 == Examples 
 
