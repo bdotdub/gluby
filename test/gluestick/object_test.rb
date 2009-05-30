@@ -18,6 +18,9 @@ class ObjectTest < Test::Unit::TestCase
     response = Gluestick::Client.instance.get("/object/get",
                                               :query => { :objectKey => 'mock_object' })
     Gluestick::Object.from_object(response).should be_kind_of(Gluestick::Object)
+
+    response = {"timestamp"=>"2009-05-29T04:28:17Z", "category"=>"movies", "title"=>"Slumdog Millionaire", "action"=>"Looked", "objectKey"=>"movies/slumdog_millionaire/danny_boyle", "userId"=>"spschessr", "image"=>"http://cdn-0.nflximg.com/us/boxshots/large/70095140.jpg", "source"=>{"name"=>"apple.com", "link"=>"http://www.apple.com/trailers/fox_searchlight/slumdogmillionaire"}}
+    Gluestick::Object.from_interaction(response).should be_kind_of(Gluestick::Object)
   end
 
   should "should respond to the user attributes" do

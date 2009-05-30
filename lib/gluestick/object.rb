@@ -18,8 +18,38 @@ module Gluestick
       raise TypeError if not response.instance_of?(Gluestick::AdaptiveBlueResponse)
 
       object_xml  = response.response['object']
-      object      = nil
+      object      = create_for_type(object_xml['type'])
 
+      assign_variables_from_response(object, response)
+      object
+    end
+
+    def self.from_interaction(response)
+      type        = response['category']
+      object      = create_for_type(type)
+
+      %w[title image objectKey].each do |property|
+        object.instance_variable_set("@#{property}", response[property])  
+      end
+
+      object.instance_variable_set("@type", type)
+      object.instance_variable_set("@link", response['source']['link'])
+
+      object
+    end
+
+    def get
+      response = Gluestick.get("/object/get", :query => { :objectId => @objectKey })
+      self.class.assign_variables_from_response(self, response)
+    end
+
+    protected
+
+    def self.create
+      new
+    end
+
+    def self.create_for_type(type)
       # Would've extracted this out into a constant, but the classes
       # are not defined and throws NameErrors
 	    @@categories = {
@@ -35,26 +65,12 @@ module Gluestick
 	      :video_games         => Gluestick::VideoGameObject,
 	      :wines               => Gluestick::WineObject
 	    }
-
-      if @@categories.has_key?(object_xml['type'].to_sym)
-        object = @@categories[object_xml['type'].to_sym].create
+      
+      if @@categories.has_key?(type.to_sym)
+        @@categories[type.to_sym].create
       else
         create
       end
-
-      assign_variables_from_response(object, response)
-      object
-    end
-
-    def get
-      response = Gluestick.get("/object/get", :query => { :objectId => objectId })
-      self.assign_variables_from_response(self, response)
-    end
-
-    protected
-
-    def self.create
-      new
     end
 
     def self.assign_variables_from_response(object, response)
