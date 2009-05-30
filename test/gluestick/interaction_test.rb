@@ -13,15 +13,16 @@ class InteractionTest < Test::Unit::TestCase
     lambda { Gluestick::Interaction.from_response([]) }.should raise_error
     @interactions = Gluestick::Interaction.from_response(response)
     @interactions.should be_instance_of(Array)
-    @interactions[0].should be_instance_of(Gluestick::Interaction)
+    @interactions[0].should be_kind_of(Gluestick::Interaction)
   end
 
   should "return a single interaction if response is a single interaction" do
     stub_get("/user/addReply", "interactions/add_reply.xml")
     response = Gluestick.get("/user/addReply")
     @interaction = Gluestick::Interaction.from_response(response)
-    @interaction.should be_instance_of(Gluestick::Interaction)
-    @interaction.should_not be_instance_of(Array)
+
+    @interaction.should be_instance_of(Gluestick::ReplyInteraction)
+    @interaction.should be_kind_of(Gluestick::Interaction)
   end
 
   context "single interaction" do

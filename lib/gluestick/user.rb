@@ -21,6 +21,11 @@ module Gluestick
       @friends = @friends.map{ |friend| User.new(friend) }
     end
 
+    def objects
+      response = Gluestick.get("/user/objects", :query => { :userId => @username })
+      @interactions = Gluestick::Interaction.from_response(response)
+    end
+
     def follow(other_user)
       other_user = other_user.username if other_user.instance_of?(Gluestick::User)
       response = Gluestick.get("/user/follow", :query => { :userId => other_user })

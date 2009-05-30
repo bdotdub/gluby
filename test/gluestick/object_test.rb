@@ -71,5 +71,28 @@ class ObjectTest < Test::Unit::TestCase
     end
   end
 
+  context "users call" do
+    setup do
+      stub_get("/object/users?objectId=movies%2Fslumdog_millionaire%2Fdanny_boyle", "interactions/users.xml")
+      stub_get("/object/get?objectId=mock_object", "object/get.xml")
+
+      @mock_object = mock_object_from_object
+      @interactions = @mock_object.users
+    end
+
+    should "return with an array in interactions" do
+      @interactions.should be_instance_of(Array)
+      @interactions[0].should be_kind_of(Gluestick::Interaction)
+    end
+
+    should "be the same object" do
+      @interactions[0].object.class.should == @mock_object.class
+    end
+
+    should "have 250 of the latest interactions" do
+      @interactions.length.should == 250
+    end
+  end
+
 end
 

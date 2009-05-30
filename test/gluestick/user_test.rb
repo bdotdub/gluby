@@ -103,6 +103,23 @@ class UserTest < Test::Unit::TestCase
     end
   end
 
+  context "getting user objects" do
+    setup do
+      stub_get("/user/objects?userId=someuser", "user/objects.xml")
+      @user = Gluestick::User.new('someuser')
+      @interactions = @user.objects
+    end
+
+    should "return an array of interactions" do
+      @interactions.should be_instance_of(Array)
+      @interactions[0].should be_kind_of(Gluestick::Interaction)
+    end
+
+    should "have multiple objects" do
+      @interactions.length.should > 0
+    end
+  end
+
 end
 
 

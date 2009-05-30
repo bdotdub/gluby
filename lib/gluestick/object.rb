@@ -43,6 +43,11 @@ module Gluestick
       self.class.assign_variables_from_response(self, response)
     end
 
+    def users
+      response = Gluestick.get("/object/users", :query => { :objectId => @objectKey })
+      Gluestick::Interaction.from_response(response)
+    end
+
     protected
 
     def self.create

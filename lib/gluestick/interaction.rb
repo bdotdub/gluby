@@ -1,11 +1,5 @@
 module Gluestick
   class Interaction
-    LOOKED        = "Looked"
-    LIKED         = "Liked"
-    COMMENT       = "Comment"
-    LIKED_COMMENT = "LikedComment"
-    REPLY         = "Reply"
-
     attr_reader           :user, :object, :action
     private_class_method  :new
 
@@ -30,6 +24,10 @@ module Gluestick
 
     private
 
+    def self.create
+      new
+    end
+
     def self.is_single_interaction?(response)
       if response.response['interactions']
         false
@@ -49,7 +47,7 @@ module Gluestick
 	    object  = Gluestick::Object.from_interaction(interaction_element)
 	    action  = interaction_element['action']
 	
-	    interaction = new
+	    interaction = create_for_action(action)
 	    interaction.instance_variable_set("@user", user)
 	    interaction.instance_variable_set("@object", object)
 	    interaction.instance_variable_set("@action", action)
@@ -57,5 +55,29 @@ module Gluestick
       interaction
     end
 
+    def self.create_for_action(action)
+      action = action.downcase
+      # Would've extracted this out into a constant, but the classes
+      # are not defined and throws NameErrors
+	    @@interactions = {
+        :looked        => Gluestick::LookedInteraction,
+        :liked         => Gluestick::LikedInteraction,
+        :comment       => Gluestick::CommentInteraction,
+        :likedcomment  => Gluestick::LikedCommentInteraction,
+        :reply         => Gluestick::ReplyInteraction
+	    }
+      
+      if @@interactions.has_key?(action.to_sym)
+        @@interactions[action.to_sym].create
+      else
+        create
+      end
+    end
   end
+
+  class LookedInteraction < Interaction; end
+  class LikedInteraction < Interaction; end
+  class CommentInteraction < Interaction; end
+  class LikedCommentInteraction < Interaction; end
+  class ReplyInteraction < Interaction; end
 end
