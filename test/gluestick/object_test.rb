@@ -94,5 +94,16 @@ class ObjectTest < Test::Unit::TestCase
     end
   end
 
+  context "links" do
+    setup do
+      stub_get("/object/links?objectId=movies%2Fslumdog_millionaire%2Fdanny_boyle", "object/links.xml")    
+      @links = mock_object_from_object.links
+    end
+
+    should "return an array of links" do
+      @links.should be_instance_of(Array)
+    end
+  end
+
 end
 

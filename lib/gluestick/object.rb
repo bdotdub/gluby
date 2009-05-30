@@ -48,6 +48,11 @@ module Gluestick
       Gluestick::Interaction.from_response(response)
     end
 
+    def links
+      response = Gluestick.get("/object/links", :query => { :objectId => @objectKey })
+      response.response['links']['link']
+    end
+
     protected
 
     def self.create

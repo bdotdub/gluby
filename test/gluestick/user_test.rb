@@ -120,6 +120,24 @@ class UserTest < Test::Unit::TestCase
     end
   end
 
+  context "getting object" do
+    setup do
+      stub_get("/user/object?userId=someuser&objectId=movies%2Fslumdog_millionaire%2Fdanny_boyle", "user/object.xml")
+      @objectKey = "movies/slumdog_millionaire/danny_boyle"
+      @user = Gluestick::User.new('someuser')
+      @interaction = @user.object(@objectKey)
+    end
+
+    should "should return an object" do
+      @interaction.object.should be_kind_of(Gluestick::Object)
+      @interaction.object.should be_instance_of(Gluestick::MovieObject)
+    end
+
+    should "be the correct object" do
+      @interaction.object.objectKey.should == @objectKey
+    end
+  end
+
 end
 
 

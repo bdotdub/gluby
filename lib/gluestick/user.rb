@@ -23,7 +23,12 @@ module Gluestick
 
     def objects
       response = Gluestick.get("/user/objects", :query => { :userId => @username })
-      @interactions = Gluestick::Interaction.from_response(response)
+      Gluestick::Interaction.from_response(response)
+    end
+
+    def object(objectId)
+      response = Gluestick.get("/user/object", :query => { :userId => @username, :objectId => objectId })
+      Gluestick::Interaction.from_response(response)
     end
 
     def follow(other_user)
