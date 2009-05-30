@@ -7,6 +7,8 @@ module Gluestick
     base_uri  API_URI
     format    :xml
 
+    attr_reader :username
+
     def login(username, password)
       basic_auth  = { :username => username, :password => password }
       response    = unauthenticated_get("/user/validate", :basic_auth => basic_auth)

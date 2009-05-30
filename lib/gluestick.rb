@@ -13,7 +13,8 @@ require 'gluestick/object'
 module Gluestick
   class << self
     extend Forwardable
-    def_delegators :client, :login
+    attr_reader     :username
+    def_delegators  :client, :login, :logout, :username
 
     def client
       @client = Gluestick::Client.instance unless @client

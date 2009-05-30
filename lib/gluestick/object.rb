@@ -1,9 +1,12 @@
 module Gluestick
   class Object
     extend LazyLoader
-  
-    private_class_method  :new
-    attr_reader           :objectKey, :title, :image, :link, :type    
+    attr_reader :objectKey
+    lazy_load   [:title, :image, :link, :type], :get
+
+    def initialize(objectKey)
+      @objectKey = objectKey
+    end
 
     def self.get(objectId)
       begin
@@ -18,15 +21,18 @@ module Gluestick
       raise TypeError if not response.instance_of?(Gluestick::AdaptiveBlueResponse)
 
       object_xml  = response.response['object']
-      object      = create_for_type(object_xml['type'])
+      type        = object_xml['type']
+      objectKey   = object_xml['objectKey']
+      object      = create_for_type(objectKey, type)
 
       assign_variables_from_response(object, response)
       object
     end
 
     def self.from_interaction(response)
+      objectKey   = response['objectKey']
       type        = response['category']
-      object      = create_for_type(type)
+      object      = create_for_type(objectKey, type)
 
       %w[title image objectKey].each do |property|
         object.instance_variable_set("@#{property}", response[property])  
@@ -53,33 +59,34 @@ module Gluestick
       response.response['links']['link']
     end
 
-    protected
-
-    def self.create
-      new
+    def glue_object?
+      false
     end
 
-    def self.create_for_type(type)
+    protected
+
+    def self.create_for_type(objectKey, type)
       # Would've extracted this out into a constant, but the classes
       # are not defined and throws NameErrors
 	    @@categories = {
-	      :books               => Gluestick::BookObject,
-	      :electronics         => Gluestick::ElectronicObject,
-	      :movie_stars         => Gluestick::MovieStarObject,
-	      :movies              => Gluestick::MovieObject,
-	      :music               => Gluestick::MusicObject,
-	      :recording_artists   => Gluestick::RecordingArtistObject,
-	      :restaurants         => Gluestick::RestaurantObject,
-	      :stocks              => Gluestick::StockObject,
-	      :tv_shows            => Gluestick::TVShowObject,
-	      :video_games         => Gluestick::VideoGameObject,
-	      :wines               => Gluestick::WineObject
+	      :books              => Gluestick::BookObject,
+	      :electronics        => Gluestick::ElectronicObject,
+	      :movie_stars        => Gluestick::MovieStarObject,
+	      :movies             => Gluestick::MovieObject,
+	      :music              => Gluestick::MusicObject,
+	      :recording_artists  => Gluestick::RecordingArtistObject,
+	      :restaurants        => Gluestick::RestaurantObject,
+	      :stocks             => Gluestick::StockObject,
+	      :tv_shows           => Gluestick::TVShowObject,
+	      :video_games        => Gluestick::VideoGameObject,
+	      :wines              => Gluestick::WineObject,
+        :bookmarks          => Gluestick::BookmarkObject
 	    }
       
       if @@categories.has_key?(type.to_sym)
-        @@categories[type.to_sym].create
+        @@categories[type.to_sym].new(objectKey)
       else
-        create
+        new(objectKey)
       end
     end
 
@@ -90,39 +97,45 @@ module Gluestick
     end
   end
 
-  class BookObject < Object
+  class GlueObject < Object
+    def glue_object?; true; end
   end
 
-  class ElectronicObject < Object
+  class BookObject < GlueObject
   end
 
-  class MovieStarObject < Object
+  class ElectronicObject < GlueObject
   end
 
-  class MovieObject < Object
+  class MovieStarObject < GlueObject
+  end
+
+  class MovieObject < GlueObject
     lazy_load [:director, :year, :starring], :get
   end
 
-  class MusicObject < Object
+  class MusicObject < GlueObject
   end
 
-  class RecordingArtistObject < Object
+  class RecordingArtistObject < GlueObject
   end
 
-  class RestaurantObject < Object
+  class RestaurantObject < GlueObject
   end
 
-  class StockObject < Object
+  class StockObject < GlueObject
   end
 
-  class TVShowObject < Object
+  class TVShowObject < GlueObject
   end
 
-  class VideoGameObject < Object
+  class VideoGameObject < GlueObject
   end
 
-  class WineObject < Object
+  class WineObject < GlueObject
   end
 
+  class BookmarkObject < Object
+  end
 
 end

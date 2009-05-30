@@ -9,8 +9,51 @@ class ObjectTest < Test::Unit::TestCase
     Gluestick::Object.from_object(response)
   end
 
-  should "not be able to instantiate an interaction" do
+  should "not be able to instantiate without objectKey" do
     lambda { Gluestick::Object.new }.should raise_error
+
+    object = Gluestick::Object.new("movies/slumdog_millionaire/danny_boyle")
+    object.should be_instance_of(Gluestick::Object)
+  end
+
+  context "object instantiated" do
+    context "with a valid key" do
+      setup do
+        stub_get("/object/users?objectId=movies%2Fslumdog_millionaire%2Fdanny_boyle", "object/get.xml")
+        @object = Gluestick::Object.get("movies/slumdog_millionaire/danny_boyle")
+      end
+
+      should "be a glue object" do
+        @object.should be_glue_object
+        @object.should be_instance_of(Gluestick::MovieObject)
+      end
+    end
+
+    context "with a bad key" do
+      setup do
+        stub_get("/object/get?objectId=blah", "errors/invalid_object.xml")
+        @object = Gluestick::Object.new("blah")
+      end
+      
+      should "throw an invalid object error when getting a lazy loaded attribute" do
+        lambda { @object.title }.should raise_error(Gluestick::InvalidObject)
+      end
+    end
+
+    context "with a URL not Glue Object" do
+      setup do
+        stub_get("/object/get?objectId=http%3A%2F%2Fwww.cnn.com%2F", "object/bookmark.xml")
+        @object = Gluestick::Object.get("http://www.cnn.com/")
+      end
+
+      should "be a bookmark object" do
+        @object.should be_instance_of(Gluestick::BookmarkObject)
+      end
+
+      should "not be a glue object" do
+        @object.should_not be_glue_object
+      end
+    end
   end
 
   should "be able to generate objects from factories" do
