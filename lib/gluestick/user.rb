@@ -11,36 +11,38 @@ module Gluestick
 
     def followers
       response = Gluestick.get("/user/followers", :query => { :userId => @username })
-      @followers = response.response['followers'].nil? ? [] : response.response['followers']['userId']
+      @followers = begin response.response['followers']['userId'] rescue [] end
       @followers = @followers.map{ |follower| User.new(follower) }
     end
 
     def friends
       response = Gluestick.get("/user/friends", :query => { :userId => @username })
-      @friends = response.response['friends'].nil? ? [] : response.response['friends']['userId']
+      @friends = begin response.response['friends']['userId'] rescue [] end
       @friends = @friends.map{ |friend| User.new(friend) }
     end
 
     def follow(other_user)
       other_user = other_user.username if other_user.instance_of?(Gluestick::User)
-
       response = Gluestick.get("/user/follow", :query => { :userId => other_user })
-      result = response.response.keys.select{ |key| ['success', 'pending'].include?(key) }
-      (result.length > 0) ? result[0] : nil;
+
+      result = nil
+      ['success', 'pending'].each do |tag|
+        result = tag if response.response.has_key?(tag)
+      end
+
+      result
     end
 
     def unfollow(other_user)
       other_user = other_user.username if other_user.instance_of?(Gluestick::User)
-
       response = Gluestick.get("/user/unfollow", :query => { :userId => other_user })
-      'success' if response.response.has_key?('success')
-      result = response.response.keys.select{ |key| ['success', 'pending'].include?(key) }
+
+      response.response.has_key?('success') ? 'success' : nil
     end
 
     def private?
       eval self.private
     end
-
 
     private
 
