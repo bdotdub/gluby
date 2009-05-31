@@ -1,9 +1,8 @@
 module Gluestick
+
+  # This is the class that wraps the XML response from the API call
+  # returned from the Glue API
   class AdaptiveBlueResponse
-
-    # This is the class that wraps the XML response from the API call
-    # returned from the Glue API
-
     attr_accessor :response, :timestamp
 
     # Takes the Glue API from +Gluestick::Response+ response and wraps it in

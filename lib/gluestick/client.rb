@@ -1,12 +1,11 @@
 module Gluestick
+
+  # = Gluestick::Client -- The client that makes all the HTTP requests
+  # 
+  # In general, these methods are not called directly. These calls can
+  # be made via the +Gluestick+ module
+  #
   class Client
-
-    # = Gluestick::Client -- The client that makes all the HTTP requests
-    # 
-    # In general, these methods are not called directly. These calls can
-    # be made via the +Gluestick+ module
-    #
-
     include Singleton
     include HTTParty
 
