@@ -9,7 +9,7 @@ module Gluestick
     # Takes the Glue API from +Gluestick::Response+ response and wraps it in
     # an object.
     def initialize(response)
-      raise ArgumentError if response.kind_of?(Hash)
+      raise ArgumentError unless response.kind_of?(Hash)
 
       response["adaptiveblue"].each_pair do |k,v|
         unless self.respond_to?(k.to_sym)
