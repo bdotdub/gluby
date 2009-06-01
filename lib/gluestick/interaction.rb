@@ -43,7 +43,7 @@ module Gluestick
 	                        interaction_element['userId'] :
 	                        username
 	
-	    user    = Gluestick::User.new(username)
+	    user    = Gluestick::User.new(interactive_user)
 	    object  = Gluestick::Object.from_interaction(interaction_element)
 	    action  = interaction_element['action']
 	

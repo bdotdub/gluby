@@ -2,7 +2,7 @@ module Gluestick
   class Object
     extend LazyLoader
     attr_reader :objectKey
-    lazy_load   [:title, :image, :link, :type], :get
+    lazy_load   [:title, :image, :link, :type, :description], :get
 
     def initialize(objectKey)
       @objectKey = objectKey
@@ -83,7 +83,7 @@ module Gluestick
         :bookmarks          => Gluestick::BookmarkObject
 	    }
       
-      if @@categories.has_key?(type.to_sym)
+      if !type.nil? && @@categories.has_key?(type.to_sym)
         @@categories[type.to_sym].new(objectKey)
       else
         new(objectKey)

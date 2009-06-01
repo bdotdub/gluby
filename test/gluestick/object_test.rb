@@ -72,7 +72,8 @@ class ObjectTest < Test::Unit::TestCase
                                     :title,
                                     :image, 
                                     :link, 
-                                    :type)
+                                    :type,
+                                    :description)
   end
 
   context "object is a movie object" do
