@@ -1,4 +1,7 @@
 module Gluestick
+
+  # This class represents an Object in Glue. An instance of this class can
+  # only be instantiated by on of the factory methods
   class Object
     extend LazyLoader
     attr_reader :objectKey
@@ -8,6 +11,8 @@ module Gluestick
       @objectKey = objectKey
     end
 
+    # Makes a call to the Glue API to get the object info. Returns nil if it
+    # cannot find an object
     def self.get(objectId)
       begin
         response = Gluestick.get("/object/get", :query => { :objectId => objectId })
@@ -82,6 +87,15 @@ module Gluestick
 	      :wines              => Gluestick::WineObject,
         :bookmarks          => Gluestick::BookmarkObject
 	    }
+
+      if type.kind_of?(Array)
+        types = type.select do |type|
+          @@categories.has_key?(type.to_sym) &&
+          type != "bookmarks"
+        end
+
+        type = (types.length == 1) ? types[0] : nil
+      end
       
       if !type.nil? && @@categories.has_key?(type.to_sym)
         @@categories[type.to_sym].new(objectKey)
