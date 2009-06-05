@@ -54,6 +54,12 @@ class ObjectTest < Test::Unit::TestCase
         @object.should_not be_glue_object
       end
     end
+
+    should "be able to load an object with two categories" do
+      stub_get("/object/get?objectId=http%3A%2F%2Fwww.ablog.com%2Fpost", "object/multiple_categories.xml")
+      lambda { @object = Gluestick::Object.get("http://www.ablog.com/post") }.should_not raise_error
+      @object.should be_instance_of(Gluestick::Object)
+    end
   end
 
   should "be able to generate objects from factories" do
