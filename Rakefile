@@ -13,8 +13,9 @@ begin
     gem.add_dependency "httparty", "0.4.3"
 
     gem.add_development_dependency "fakeweb"
-    gem.add_development_dependency "shoulda"
-    gem.add_development_dependency "matchy"
+    gem.add_development_dependency "thoughtbot-shoulda"
+    gem.add_development_dependency "jeremymcanally-matchy"
+    gem.add_development_dependency "jgre-monkeyspecdoc"
 
   end
 
