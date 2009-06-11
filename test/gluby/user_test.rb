@@ -115,6 +115,45 @@ class UserTest < Test::Unit::TestCase
     end
   end
 
+  context "with another user" do
+    context "who is a valid user" do
+      setup do
+        stub_get("/user/follow?followUserId=valid_user", "user/follow.xml")
+        stub_get("/user/follow?followUserId=private_user", "user/follow_pending.xml")
+        stub_get("/user/unfollow?unfollowUserId=valid_user", "user/unfollow.xml")
+
+        @user = Gluby::User.new('valid_user')
+        @private_user = Gluby::User.new('private_user')
+      end
+
+      should "be success if you follow a public user" do
+        @user.follow.should == :success
+      end
+
+      should "be pending if you follow a private user" do
+        @private_user.follow.should == :pending
+      end
+
+      should "be success if you unfollow someone" do
+        @user.unfollow.should == :success
+      end
+    end
+
+    context "who is an invalid user" do
+      setup do
+        stub_get("/user/follow?followUserId=invalid_user", "errors/invalid_user.xml")
+        stub_get("/user/unfollow?unfollowUserId=invalid_user", "errors/invalid_user.xml")
+
+        @invalid_user = Gluby::User.new('invalid_user')
+      end
+
+      should "raise an error when you follow or unfollow an invalid user" do
+        lambda { @invalid_user.follow }.should raise_error(Gluby::InvalidUser)
+        lambda { @invalid_user.unfollow }.should raise_error(Gluby::InvalidUser)
+      end
+    end
+  end
+
 end
 
 

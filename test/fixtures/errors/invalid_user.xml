@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><adaptiveblue><request><method>/user/follow</method><params><followUserId>invalid_user</followUserId></params></request><error><code>304</code><name>InvalidUser</name><message>me cannot follow invalid_user. invalid_user has no friends file. This account doesn't exist or may be in the process of being deleted.</message></error></adaptiveblue>

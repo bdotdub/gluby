@@ -31,6 +31,17 @@ module Gluby
       Gluby::Interaction.from_response(response)
     end
 
+    def follow
+      response = Gluby.get("/user/follow", :query => { :followUserId => @username })
+      return :success if response.response.has_key?('success')
+      return :pending if response.response.has_key?('pending')
+    end
+
+    def unfollow
+      response = Gluby.get("/user/unfollow", :query => { :unfollowUserId => @username })
+      return :success if response.response.has_key?('success')
+    end
+
     def private?
       eval self.private
     end
