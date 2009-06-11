@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'rubygems'
-require 'gluestick'
+require 'gluby'
 
 # Login
 Gluby.login(ENV['GLUE_USERNAME'], ENV['GLUE_PASSWORD'])

@@ -2,13 +2,13 @@ require 'singleton'
 require 'forwardable'
 require 'httparty'
 
-require 'gluestick/lazy_loader'
-require 'gluestick/client'
-require 'gluestick/response'
-require 'gluestick/errors'
-require 'gluestick/user'
-require 'gluestick/interaction'
-require 'gluestick/object'
+require 'gluby/lazy_loader'
+require 'gluby/client'
+require 'gluby/response'
+require 'gluby/errors'
+require 'gluby/user'
+require 'gluby/interaction'
+require 'gluby/object'
 
 module Gluby
 

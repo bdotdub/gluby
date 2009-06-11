@@ -10,18 +10,18 @@ Before making any calls to Glue, you must login. To do that, call:
 
 === Documentation
 
-For documentation, please refer to: http://rdoc.info/projects/bdotdub/gluestick
+For documentation, please refer to: http://rdoc.info/projects/bdotdub/gluby
 
 == Examples 
 
 For examples on how to use the library, please refer to the `examples` directory
-or http://github.com/bdotdub/gluestick/tree/master/examples
+or http://github.com/bdotdub/gluby/tree/master/examples
 
 == Installation
 
 To install it as a gem, run:
 
-  $ sudo gem install bdotdub-gluestick --source=http://gems.github.com
+  $ sudo gem install bdotdub-gluby --source=http://gems.github.com
 
 == Author
 
