@@ -155,5 +155,75 @@ class ObjectTest < Test::Unit::TestCase
     end
   end
 
+  context "private actions" do
+    setup do
+      # Visit
+      stub_get('/user/addVisit?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=invalid_key', 'errors/invalid_object.xml')
+
+      # Like
+      stub_get('/user/addVisit?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=invalid_key', 'errors/invalid_object.xml')
+
+      # Add 2 cents
+      stub_get('/user/addVisit?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=invalid_key', 'errors/invalid_object.xml')
+
+      @invalid_object = Gluby::Object.new('invalid_key')
+    end
+
+    context "valid object" do
+      setup do
+        # Add
+        stub_get('/user/addVisit?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang', 'interactions/visit.xml')
+        stub_get('/user/addLike?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang', 'interactions/visit.xml')
+        stub_get('/user/add2Cents?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang&comment=this%20is%20a%20comment', 'interactions/visit.xml')
+
+        # Remove
+        stub_get('/user/removeVisit?objectId=movies%2Fying_xiong%2Fyimou_zhang', 'object/success.xml')
+        stub_get('/user/removeLike?objectId=movies%2Fying_xiong%2Fyimou_zhang', 'object/success.xml')
+        stub_get('/user/remove2Cents?objectId=movies%2Fying_xiong%2Fyimou_zhang', 'object/success.xml')
+
+        @object = Gluby::Object.new('movies/ying_xiong/yimou_zhang')
+      end
+
+      should "return an interaction for add actions" do
+        @object.visit.should be_kind_of(Gluby::Interaction)
+        @object.like.should be_kind_of(Gluby::Interaction)
+        @object.add2cents('this is a comment').should be_kind_of(Gluby::Interaction)
+      end
+
+      should "return success for remove actions" do
+        @object.unvisit.should == :success
+        @object.unlike.should == :success
+        @object.remove2cents.should == :success
+      end
+    end
+
+    context "invalid object" do
+      setup do
+        # Add
+        stub_get('/user/addVisit?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang', 'errors/invalid_object.xml')
+        stub_get('/user/addLike?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang', 'errors/invalid_object.xml')
+        stub_get('/user/add2Cents?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang&comment=this%20is%20a%20comment', 'errors/invalid_object.xml')
+
+        # Remove
+        stub_get('/user/removeVisit?objectId=movies%2Fying_xiong%2Fyimou_zhang', 'errors/invalid_object.xml')
+        stub_get('/user/removeLike?objectId=movies%2Fying_xiong%2Fyimou_zhang', 'errors/invalid_object.xml')
+        stub_get('/user/remove2Cents?objectId=movies%2Fying_xiong%2Fyimou_zhang', 'errors/invalid_object.xml')
+
+        @object = Gluby::Object.new('movies/ying_xiong/yimou_zhang')
+      end
+
+      should "raise invalid object exception for add actions" do
+        lambda { @object.visit }.should raise_error(Gluby::InvalidObject)
+        lambda { @object.like }.should raise_error(Gluby::InvalidObject)
+        lambda { @object.add2cents('this is a comment') }.should raise_error(Gluby::InvalidObject)
+      end
+
+      should "raise invalid object exception remove actions" do
+        lambda { @object.unvisit }.should raise_error(Gluby::InvalidObject)
+        lambda { @object.unlike }.should raise_error(Gluby::InvalidObject)
+        lambda { @object.remove2cents }.should raise_error(Gluby::InvalidObject)
+      end
+    end
+  end
 end
 

@@ -64,6 +64,36 @@ module Gluby
       response.response['links']['link']
     end
 
+    def visit
+      response = Gluby.get("/user/addVisit", :query => { :objectId => @objectKey, :source => 'http://gluetogo.heroku.com', :app => 'GlueToGo' })
+      Gluby::Interaction.from_response(response)
+    end
+
+    def unvisit
+      response = Gluby.get("/user/removeVisit", :query => { :objectId => @objectKey })
+      return :success if response.response.has_key?('success')
+    end
+
+    def like
+      response = Gluby.get("/user/addLike", :query => { :objectId => @objectKey, :source => 'http://gluetogo.heroku.com', :app => 'GlueToGo' })
+      Gluby::Interaction.from_response(response)
+    end
+
+    def unlike
+      response = Gluby.get("/user/removeLike", :query => { :objectId => @objectKey })
+      return :success if response.response.has_key?('success')
+    end
+
+    def add2cents(comment)
+      response = Gluby.get("/user/add2Cents", :query => { :objectId => @objectKey, :source => 'http://gluetogo.heroku.com', :app => 'GlueToGo', :comment => comment })
+      Gluby::Interaction.from_response(response)
+    end
+
+    def remove2cents
+      response = Gluby.get("/user/remove2Cents", :query => { :objectId => @objectKey })
+      return :success if response.response.has_key?('success')
+    end
+
     def glue_object?
       false
     end
