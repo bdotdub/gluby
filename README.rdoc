@@ -1,4 +1,4 @@
-= Gluestick
+= Gluby
 
 Ruby bindings for the Glue API (http://getglue.com/api).
 
@@ -6,7 +6,7 @@ Ruby bindings for the Glue API (http://getglue.com/api).
 
 Before making any calls to Glue, you must login. To do that, call:
 
-  Gluestick.login(username, password)
+  Gluby.login(username, password)
 
 === Documentation
 

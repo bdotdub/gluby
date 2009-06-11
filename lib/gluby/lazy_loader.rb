@@ -1,4 +1,4 @@
-module Gluestick
+module Gluby
   module LazyLoader
     def lazy_load(properties, method)
       properties.each do |property|

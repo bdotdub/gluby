@@ -6,21 +6,21 @@ class ErrorTest < Test::Unit::TestCase
     stub_login
     stub_get("/user/invalid", "blank.xml", 500)
 
-    lambda { Gluestick.client.get("/user/invalid") }.should raise_error(Gluestick::InternalServerError)
+    lambda { Gluby.client.get("/user/invalid") }.should raise_error(Gluby::InternalServerError)
   end
 
   should "get a MissingParameter error" do
     stub_login
     stub_get("/user/profile", "errors/missing_parameter.xml", 400);
 
-    lambda { Gluestick.client.get("/user/profile") }.should raise_error(Gluestick::MissingParameter)
+    lambda { Gluby.client.get("/user/profile") }.should raise_error(Gluby::MissingParameter)
   end
   
   should "get a MissingObject error" do
     stub_login
     stub_get("/object/get?objectId=something", "errors/invalid_object.xml", 400);
 
-    lambda { Gluestick.client.get("/object/get?objectId=something") }.should raise_error(Gluestick::InvalidObject)
+    lambda { Gluby.client.get("/object/get?objectId=something") }.should raise_error(Gluby::InvalidObject)
   end
 
   context "error initialized with response" do
@@ -34,16 +34,16 @@ class ErrorTest < Test::Unit::TestCase
 
     should "respond to message, code, and name" do
       begin
-        Gluestick.client.get("/user/profile")
-      rescue Gluestick::MissingParameter => missing_object
+        Gluby.client.get("/user/profile")
+      rescue Gluby::MissingParameter => missing_object
         missing_object.should respond_to(:name, :message, :code)
       end
     end
 
     should "have the correct code and name" do
       begin
-        Gluestick.client.get("/user/profile")
-      rescue Gluestick::MissingParameter => missing_object
+        Gluby.client.get("/user/profile")
+      rescue Gluby::MissingParameter => missing_object
         missing_object.name.should == "MissingParameter"
         missing_object.code.should == 101
       end

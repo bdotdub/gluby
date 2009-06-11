@@ -1,4 +1,4 @@
-module Gluestick
+module Gluby
 
   # This class represents an Object in Glue. An instance of this class can
   # only be instantiated by on of the factory methods
@@ -15,15 +15,15 @@ module Gluestick
     # cannot find an object
     def self.get(objectId)
       begin
-        response = Gluestick.get("/object/get", :query => { :objectId => objectId })
+        response = Gluby.get("/object/get", :query => { :objectId => objectId })
         from_object(response)
-      rescue Gluestick::InvalidObject
+      rescue Gluby::InvalidObject
         nil
       end
     end
 
     def self.from_object(response)
-      raise ArgumentError if not response.instance_of?(Gluestick::AdaptiveBlueResponse)
+      raise ArgumentError if not response.instance_of?(Gluby::AdaptiveBlueResponse)
 
       object_xml  = response.response['object']
       type        = object_xml['type']
@@ -50,17 +50,17 @@ module Gluestick
     end
 
     def get
-      response = Gluestick.get("/object/get", :query => { :objectId => @objectKey })
+      response = Gluby.get("/object/get", :query => { :objectId => @objectKey })
       self.class.assign_variables_from_response(self, response)
     end
 
     def users
-      response = Gluestick.get("/object/users", :query => { :objectId => @objectKey })
-      Gluestick::Interaction.from_response(response)
+      response = Gluby.get("/object/users", :query => { :objectId => @objectKey })
+      Gluby::Interaction.from_response(response)
     end
 
     def links
-      response = Gluestick.get("/object/links", :query => { :objectId => @objectKey })
+      response = Gluby.get("/object/links", :query => { :objectId => @objectKey })
       response.response['links']['link']
     end
 
@@ -74,18 +74,18 @@ module Gluestick
       # Would've extracted this out into a constant, but the classes
       # are not defined and throws NameErrors
 	    @@categories = {
-	      :books              => Gluestick::BookObject,
-	      :electronics        => Gluestick::ElectronicObject,
-	      :movie_stars        => Gluestick::MovieStarObject,
-	      :movies             => Gluestick::MovieObject,
-	      :music              => Gluestick::MusicObject,
-	      :recording_artists  => Gluestick::RecordingArtistObject,
-	      :restaurants        => Gluestick::RestaurantObject,
-	      :stocks             => Gluestick::StockObject,
-	      :tv_shows           => Gluestick::TVShowObject,
-	      :video_games        => Gluestick::VideoGameObject,
-	      :wines              => Gluestick::WineObject,
-        :bookmarks          => Gluestick::BookmarkObject
+	      :books              => Gluby::BookObject,
+	      :electronics        => Gluby::ElectronicObject,
+	      :movie_stars        => Gluby::MovieStarObject,
+	      :movies             => Gluby::MovieObject,
+	      :music              => Gluby::MusicObject,
+	      :recording_artists  => Gluby::RecordingArtistObject,
+	      :restaurants        => Gluby::RestaurantObject,
+	      :stocks             => Gluby::StockObject,
+	      :tv_shows           => Gluby::TVShowObject,
+	      :video_games        => Gluby::VideoGameObject,
+	      :wines              => Gluby::WineObject,
+        :bookmarks          => Gluby::BookmarkObject
 	    }
 
       if type.kind_of?(Array)

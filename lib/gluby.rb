@@ -10,7 +10,7 @@ require 'gluestick/user'
 require 'gluestick/interaction'
 require 'gluestick/object'
 
-module Gluestick
+module Gluby
 
   class << self
     extend Forwardable
@@ -19,14 +19,14 @@ module Gluestick
 
     # Returns the singleton instance
     def client
-      @client = Gluestick::Client.instance unless @client
+      @client = Gluby::Client.instance unless @client
       @client
     end
 
     # Perform a Glue API HTTP GET on URL with +HTTParty+ options. Returns an
     # +AdaptiveBlueResponse+ or raises an exception
     # 
-    #   Gluestick.get("/user/get", :query => { :userId => 'someuser' }) 
+    #   Gluby.get("/user/get", :query => { :userId => 'someuser' }) 
     #
     def get(url, *args)
       self.client.get(url, *args)
@@ -35,7 +35,7 @@ module Gluestick
     # Perform a Glue API HTTP POST on URL with +HTTParty+ options. Returns an
     # +AdaptiveBlueResponse+ or raises an exception
     # 
-    #   Gluestick.get("/user/get", :query => { :userId => 'someuser' }) 
+    #   Gluby.get("/user/get", :query => { :userId => 'someuser' }) 
     #
     def post(url, *args)
       self.client.post(url, *args)

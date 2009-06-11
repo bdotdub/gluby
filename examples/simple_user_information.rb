@@ -3,11 +3,11 @@ require 'rubygems'
 require 'gluestick'
 
 # Login
-Gluestick.login(ENV['GLUE_USERNAME'], ENV['GLUE_PASSWORD'])
+Gluby.login(ENV['GLUE_USERNAME'], ENV['GLUE_PASSWORD'])
 username = ENV['GLUE_USERNAME']
 
 # Create user
-@user = Gluestick::User.new(username)
+@user = Gluby::User.new(username)
 
 # Quickie output
 puts "Example with #{username}"

@@ -3,26 +3,26 @@ require File.dirname(__FILE__) + '/../test_helper'
 class InteractionTest < Test::Unit::TestCase
 
   should "not be able to instantiate an interaction" do
-    lambda { Gluestick::Interaction.new }.should raise_error
+    lambda { Gluby::Interaction.new }.should raise_error
   end
 
   should "generate an interaction from a response" do
     stub_get("/object/users?objectId=someKey", "interactions/users.xml")
-    response = Gluestick.get("/object/users", :query => { :objectId => 'someKey' })
+    response = Gluby.get("/object/users", :query => { :objectId => 'someKey' })
 
-    lambda { Gluestick::Interaction.from_response([]) }.should raise_error
-    @interactions = Gluestick::Interaction.from_response(response)
+    lambda { Gluby::Interaction.from_response([]) }.should raise_error
+    @interactions = Gluby::Interaction.from_response(response)
     @interactions.should be_instance_of(Array)
-    @interactions[0].should be_kind_of(Gluestick::Interaction)
+    @interactions[0].should be_kind_of(Gluby::Interaction)
   end
 
   should "return a single interaction if response is a single interaction" do
     stub_get("/user/addReply", "interactions/add_reply.xml")
-    response = Gluestick.get("/user/addReply")
-    @interaction = Gluestick::Interaction.from_response(response)
+    response = Gluby.get("/user/addReply")
+    @interaction = Gluby::Interaction.from_response(response)
 
-    @interaction.should be_instance_of(Gluestick::ReplyInteraction)
-    @interaction.should be_kind_of(Gluestick::Interaction)
+    @interaction.should be_instance_of(Gluby::ReplyInteraction)
+    @interaction.should be_kind_of(Gluby::Interaction)
   end
 
   context "single interaction" do
@@ -31,8 +31,8 @@ class InteractionTest < Test::Unit::TestCase
       stub_get("/object/get?objectId=movies%2Fslumdog_millionaire%2Fdanny_boyle", "object/get.xml")
 
       stub_get("/user/addReply", "interactions/add_reply.xml")
-      response = Gluestick.get("/user/addReply")
-      @interaction = Gluestick::Interaction.from_response(response)
+      response = Gluby.get("/user/addReply")
+      @interaction = Gluby::Interaction.from_response(response)
     end
 
     should "respond to type, user, and object" do
@@ -41,7 +41,7 @@ class InteractionTest < Test::Unit::TestCase
 
     context "object" do
       should "be an instance of movieobject" do
-        @interaction.object.should be_instance_of(Gluestick::MovieObject)
+        @interaction.object.should be_instance_of(Gluby::MovieObject)
       end
 
       should "be able to pull attributes" do
@@ -51,7 +51,7 @@ class InteractionTest < Test::Unit::TestCase
 
     context "user" do
       should "be of type User" do
-        @interaction.user.should be_instance_of(Gluestick::User)
+        @interaction.user.should be_instance_of(Gluby::User)
       end
 
       should "be able to pull lazy loaded attributes" do
@@ -64,12 +64,12 @@ class InteractionTest < Test::Unit::TestCase
     context "liked comment" do
       setup do
         stub_get("/user/object", "user/object.xml")
-        response = Gluestick.get("/user/object")
-        @interaction = Gluestick::Interaction.from_response(response)
+        response = Gluby.get("/user/object")
+        @interaction = Gluby::Interaction.from_response(response)
       end
 
       should "be a liked comment interaction" do
-        @interaction.should be_instance_of(Gluestick::LikedCommentInteraction)
+        @interaction.should be_instance_of(Gluby::LikedCommentInteraction)
       end
 
       should "have a comment" do

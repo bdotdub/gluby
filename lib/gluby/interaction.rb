@@ -1,10 +1,10 @@
-module Gluestick
+module Gluby
   class Interaction
     attr_reader           :user, :object, :action
     private_class_method  :new
 
     def self.from_response(response)
-      raise ArgumentError if response.class != Gluestick::AdaptiveBlueResponse
+      raise ArgumentError if response.class != Gluby::AdaptiveBlueResponse
 
       interactions  = interactions_xml = []
       username      = response.request['params']['userId'] || ''
@@ -43,8 +43,8 @@ module Gluestick
 	                        interaction_element['userId'] :
 	                        username
 	
-	    user    = Gluestick::User.new(interactive_user)
-	    object  = Gluestick::Object.from_interaction(interaction_element)
+	    user    = Gluby::User.new(interactive_user)
+	    object  = Gluby::Object.from_interaction(interaction_element)
 	    action  = interaction_element['action']
 	
 	    interaction = create_for_action(action)
@@ -64,11 +64,11 @@ module Gluestick
       # Would've extracted this out into a constant, but the classes
       # are not defined and throws NameErrors
 	    @@interactions = {
-        :looked        => Gluestick::LookedInteraction,
-        :liked         => Gluestick::LikedInteraction,
-        :comment       => Gluestick::CommentInteraction,
-        :likedcomment  => Gluestick::LikedCommentInteraction,
-        :reply         => Gluestick::ReplyInteraction
+        :looked        => Gluby::LookedInteraction,
+        :liked         => Gluby::LikedInteraction,
+        :comment       => Gluby::CommentInteraction,
+        :likedcomment  => Gluby::LikedCommentInteraction,
+        :reply         => Gluby::ReplyInteraction
 	    }
       
       if @@interactions.has_key?(action.to_sym)

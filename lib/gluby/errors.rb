@@ -1,4 +1,4 @@
-module Gluestick
+module Gluby
   class AdaptiveBlueError < StandardError
     attr_reader :name, :code, :message
 

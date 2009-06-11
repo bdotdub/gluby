@@ -4,6 +4,8 @@ require 'shoulda'
 require 'matchy'
 require 'fakeweb'
 
+require 'monkeyspecdoc'
+
 FakeWeb.allow_net_connect = false
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
@@ -14,7 +16,7 @@ class Test::Unit::TestCase
 end
 
 def api_uri(path)
-  base_uri = Gluestick::Client::API_URI.gsub(/\/v1/, ":80/v1")
+  base_uri = Gluby::Client::API_URI.gsub(/\/v1/, ":80/v1")
   "#{base_uri}#{path}"
 end
 
@@ -42,7 +44,7 @@ end
   
 def stub_login
    stub_get("/user/validate", "authentication/success.xml")
-   Gluestick.login("username", "password")
+   Gluby.login("username", "password")
 end
 
 

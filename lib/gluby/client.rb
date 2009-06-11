@@ -1,9 +1,9 @@
-module Gluestick
+module Gluby
 
-  # = Gluestick::Client -- The client that makes all the HTTP requests
+  # = Gluby::Client -- The client that makes all the HTTP requests
   # 
   # In general, these methods are not called directly. These calls can
-  # be made via the +Gluestick+ module
+  # be made via the +Gluby+ module
   #
   class Client
     include Singleton
@@ -46,15 +46,15 @@ module Gluestick
     # Perform HTTP GET on the Glue API for +url+. +options+ are HTTParty options.
     # This mixes in the authentication stuff for the HTTParty call.
     def get(url, options = {})
-      raise Gluestick::NotAuthenticated unless self.authenticated?
+      raise Gluby::NotAuthenticated unless self.authenticated?
       authentication = ({ :username => @username, :password => @password })
       options[:basic_auth] = authentication
       unauthenticated_get(url, options)
     end
 
-    # Just like Gluestick::Client::get, except it does an HTTP POST
+    # Just like Gluby::Client::get, except it does an HTTP POST
     def post(url, options = {})
-      raise Gluestick::NotAuthenticated unless self.authenticated?
+      raise Gluby::NotAuthenticated unless self.authenticated?
       authentication = ({ :username => @username, :password => @password })
       options[:basic_auth] = authentication
       unauthenticated_post(url, options)
@@ -74,7 +74,7 @@ module Gluestick
 
     def parse_response(response)
       check_and_raise_errors(response)
-      Gluestick::AdaptiveBlueResponse.new(response)
+      Gluby::AdaptiveBlueResponse.new(response)
     end
 
     def check_and_raise_errors(response)
@@ -90,23 +90,23 @@ module Gluestick
 
         case error['code'].to_i
           when 101 then
-            raise Gluestick::MissingParameter.new(error)
+            raise Gluby::MissingParameter.new(error)
           when 201 then
-            raise Gluestick::NotAuthenticated
+            raise Gluby::NotAuthenticated
           when 202 then
-            raise Gluestick::PermissionError
+            raise Gluby::PermissionError
           when 301 then
-            raise Gluestick::InvalidURL
+            raise Gluby::InvalidURL
           when 302 then
-            raise Gluestick::InvalidObject.new(error)
+            raise Gluby::InvalidObject.new(error)
           when 303 then
-            raise Gluestick::InvalidInteraction
+            raise Gluby::InvalidInteraction
           when 304 then
-            raise Gluestick::InvalidUser
+            raise Gluby::InvalidUser
         end
       else
         case response.code
-          when 500 then raise Gluestick::InternalServerError
+          when 500 then raise Gluby::InternalServerError
         end
       end
     end
