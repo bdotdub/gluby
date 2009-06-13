@@ -36,7 +36,10 @@ class InteractionTest < Test::Unit::TestCase
     end
 
     should "respond to type, user, and object" do
-      @interaction.should respond_to(:type, :user, :object)
+      @interaction.should respond_to(:type)
+      @interaction.should respond_to(:user)
+      @interaction.should respond_to(:object)
+      @interaction.should respond_to(:timestamp)
     end
 
     context "object" do

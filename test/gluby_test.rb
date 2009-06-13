@@ -3,7 +3,9 @@ require 'test_helper'
 class GlubyTest < Test::Unit::TestCase
 
 should "respond to client attributes" do
-  Gluby.should respond_to(:client, :login, :username)
+  Gluby.should respond_to(:client)
+  Gluby.should respond_to(:login)
+  Gluby.should respond_to(:username)
 end
 
 context "client" do

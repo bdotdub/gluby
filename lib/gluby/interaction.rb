@@ -1,6 +1,6 @@
 module Gluby
   class Interaction
-    attr_reader           :user, :object, :action
+    attr_reader           :user, :object, :action, :timestamp
     private_class_method  :new
 
     def self.from_response(response)

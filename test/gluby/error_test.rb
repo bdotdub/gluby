@@ -36,7 +36,9 @@ class ErrorTest < Test::Unit::TestCase
       begin
         Gluby.client.get("/user/profile")
       rescue Gluby::MissingParameter => missing_object
-        missing_object.should respond_to(:name, :message, :code)
+        missing_object.should respond_to(:name)
+        missing_object.should respond_to(:message, :code)
+        missing_object.should respond_to(:code)
       end
     end
 
