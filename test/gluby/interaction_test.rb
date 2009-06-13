@@ -82,5 +82,29 @@ class InteractionTest < Test::Unit::TestCase
     end
   end
 
+  context "add reply to 2 cents" do
+    setup do
+      stub_get('/user/addReply?source=http%3A%2F%2Fgithub.com%2Fbdotdub%2Fgluby&objectId=movies%2Fslumdog_millionaire%2Fdanny_boyle&app=Gluby&replyTo=someuser&reply=hello', 'interactions/add_reply.xml')
+
+      stub_get("/user/object", "user/object.xml")
+      response = Gluby.get("/user/object")
+      @interaction = Gluby::Interaction.from_response(response)
+    end
+
+    should "be able to reply and remove reply" do
+      @interaction.should respond_to :reply
+      @interaction.should respond_to :remove_reply
+    end
+
+    should "return an interaction if successful" do
+      response = @interaction.reply('hello')
+      response.should be_kind_of(Gluby::Interaction)
+    end
+
+    should "return an error if response is too long" do
+      reply = 'abc' * 60
+      lambda { @interaction.reply(reply) }.should raise_error(Gluby::TooManyCharacters)
+    end
+  end
 end
 

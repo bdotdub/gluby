@@ -65,7 +65,7 @@ module Gluby
     end
 
     def visit
-      response = Gluby.get("/user/addVisit", :query => { :objectId => @objectKey, :source => 'http://gluetogo.heroku.com', :app => 'GlueToGo' })
+      response = Gluby.get("/user/addVisit", :query => { :objectId => @objectKey, :source => Gluby::GLUE_SOURCE, :app => Gluby::GLUE_APP })
       Gluby::Interaction.from_response(response)
     end
 
@@ -75,7 +75,7 @@ module Gluby
     end
 
     def like
-      response = Gluby.get("/user/addLike", :query => { :objectId => @objectKey, :source => 'http://gluetogo.heroku.com', :app => 'GlueToGo' })
+      response = Gluby.get("/user/addLike", :query => { :objectId => @objectKey, :source => Gluby::GLUE_SOURCE, :app => Gluby::GLUE_APP })
       Gluby::Interaction.from_response(response)
     end
 
@@ -85,7 +85,9 @@ module Gluby
     end
 
     def add2cents(comment)
-      response = Gluby.get("/user/add2Cents", :query => { :objectId => @objectKey, :source => 'http://gluetogo.heroku.com', :app => 'GlueToGo', :comment => comment })
+      raise Gluby::TooManyCharacters if comment.length > 160
+
+      response = Gluby.get("/user/add2Cents", :query => { :objectId => @objectKey, :source => Gluby::GLUE_SOURCE, :app => Gluby::GLUE_APP, :comment => comment })
       Gluby::Interaction.from_response(response)
     end
 

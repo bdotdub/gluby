@@ -157,24 +157,20 @@ class ObjectTest < Test::Unit::TestCase
 
   context "private actions" do
     setup do
-      # Visit
-      stub_get('/user/addVisit?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=invalid_key', 'errors/invalid_object.xml')
+    end
 
-      # Like
-      stub_get('/user/addVisit?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=invalid_key', 'errors/invalid_object.xml')
-
-      # Add 2 cents
-      stub_get('/user/addVisit?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=invalid_key', 'errors/invalid_object.xml')
-
-      @invalid_object = Gluby::Object.new('invalid_key')
+    should "not be able to add 2 cents longer than 160 characters" do
+      @object = Gluby::Object.new('movies/ying_xiong/yimou_zhang')
+      two_cents = 'abc' * 60
+      lambda { @object.add2cents(two_cents) }.should raise_error(Gluby::TooManyCharacters)
     end
 
     context "valid object" do
       setup do
         # Add
-        stub_get('/user/addVisit?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang', 'interactions/visit.xml')
-        stub_get('/user/addLike?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang', 'interactions/visit.xml')
-        stub_get('/user/add2Cents?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang&comment=this%20is%20a%20comment', 'interactions/visit.xml')
+        stub_get('/user/addVisit?source=http%3A%2F%2Fgithub.com%2Fbdotdub%2Fgluby&objectId=movies%2Fying_xiong%2Fyimou_zhang&app=Gluby', 'interactions/visit.xml')
+        stub_get('/user/addLike?source=http%3A%2F%2Fgithub.com%2Fbdotdub%2Fgluby&objectId=movies%2Fying_xiong%2Fyimou_zhang&app=Gluby', 'interactions/visit.xml')
+        stub_get('/user/add2Cents?source=http%3A%2F%2Fgithub.com%2Fbdotdub%2Fgluby&comment=this%20is%20a%20comment&objectId=movies%2Fying_xiong%2Fyimou_zhang&app=Gluby', 'interactions/visit.xml')
 
         # Remove
         stub_get('/user/removeVisit?objectId=movies%2Fying_xiong%2Fyimou_zhang', 'object/success.xml')
@@ -200,9 +196,9 @@ class ObjectTest < Test::Unit::TestCase
     context "invalid object" do
       setup do
         # Add
-        stub_get('/user/addVisit?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang', 'errors/invalid_object.xml')
-        stub_get('/user/addLike?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang', 'errors/invalid_object.xml')
-        stub_get('/user/add2Cents?source=http%3A%2F%2Fgluetogo.heroku.com&app=GlueToGo&objectId=movies%2Fying_xiong%2Fyimou_zhang&comment=this%20is%20a%20comment', 'errors/invalid_object.xml')
+        stub_get('/user/addVisit?source=http%3A%2F%2Fgithub.com%2Fbdotdub%2Fgluby&objectId=movies%2Fying_xiong%2Fyimou_zhang&app=Gluby', 'errors/invalid_object.xml')
+        stub_get('/user/addLike?source=http%3A%2F%2Fgithub.com%2Fbdotdub%2Fgluby&objectId=movies%2Fying_xiong%2Fyimou_zhang&app=Gluby', 'errors/invalid_object.xml')
+        stub_get('/user/add2Cents?source=http%3A%2F%2Fgithub.com%2Fbdotdub%2Fgluby&comment=this%20is%20a%20comment&objectId=movies%2Fying_xiong%2Fyimou_zhang&app=Gluby', 'errors/invalid_object.xml')
 
         # Remove
         stub_get('/user/removeVisit?objectId=movies%2Fying_xiong%2Fyimou_zhang', 'errors/invalid_object.xml')

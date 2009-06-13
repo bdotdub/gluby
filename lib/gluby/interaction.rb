@@ -84,6 +84,24 @@ module Gluby
 
   class InteractionWithComment < Interaction
     attr_reader :comment
+
+    def reply(reply)
+      raise Gluby::TooManyCharacters if reply.length > 160
+      puts reply.length
+
+      query = {
+        :objectId => self.object.objectKey,
+        :source   => Gluby::GLUE_SOURCE,
+        :app      => Gluby::GLUE_APP,
+        :replyTo  => self.user.username,
+        :reply    => reply
+      }
+      response = Gluby.get('/user/addReply', :query => query)
+      Gluby::Interaction.from_response(response)
+    end
+
+    def remove_reply
+    end
   end
 
   class CommentInteraction < InteractionWithComment

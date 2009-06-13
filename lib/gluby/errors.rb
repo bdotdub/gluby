@@ -19,5 +19,6 @@ module Gluby
   class InvalidInteraction < AdaptiveBlueError; end
   class InvalidUser < AdaptiveBlueError; end
   class InternalServerError < AdaptiveBlueError; end
+  class TooManyCharacters < AdaptiveBlueError; end
 end
 

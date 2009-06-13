@@ -12,6 +12,9 @@ require 'gluby/object'
 
 module Gluby
 
+  GLUE_SOURCE = 'http://github.com/bdotdub/gluby'
+  GLUE_APP    = 'Gluby'
+
   class << self
     extend Forwardable
     attr_reader     :username
@@ -45,6 +48,7 @@ module Gluby
     def logged_in?
       self.client.authenticated?
     end
+
   end
   
 end
